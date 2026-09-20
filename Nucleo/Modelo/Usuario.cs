@@ -17,8 +17,8 @@ namespace Nucleo.Modelo
         private Boolean  _activo;
         private DateTime _fechaCaducidad;
 
-        private ulong _hashClave;
-        private ulong _salClave;
+        private string _hashClave;
+        private string _salClave;
 
 
 
@@ -34,13 +34,13 @@ namespace Nucleo.Modelo
 
         public int Id { get { return this._id; } set { this._id = value; } }
 
-        public ulong generadorSalClave()
+        public string generadorSalClave()
         {
-            return 1;
+            return "";
         }
-        public ulong generadorHashClave(string clave, ulong sal)
+        public string generadorHashClave(string clave, string sal)
         {
-            return 1;
+            return "";
         }
     }
 
