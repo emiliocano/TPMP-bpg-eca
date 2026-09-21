@@ -12,7 +12,7 @@ namespace Nucleo.Modelo
         private string   _apellido1;
         private string   _apellido2;
         private string   _eMail;
-        private Roll     _roll;
+        private Rol     _rol;
         private Idioma   _idioma;
         private Boolean  _activo;
         private DateTime _fechaCaducidad;
@@ -44,11 +44,11 @@ namespace Nucleo.Modelo
         }
     }
 
-    public class Roll
+    public class Rol
     {
         private string _nombre;
 
-        public Roll(string nombre)
+        public Rol(string nombre)
         {
             _nombre = nombre;
         }
