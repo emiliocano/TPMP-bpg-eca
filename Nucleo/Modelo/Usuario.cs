@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Nucleo.Modelo
+namespace TPMP_bpg_eca.Nucleo.Modelo
 {
     public class Usuario
     {
