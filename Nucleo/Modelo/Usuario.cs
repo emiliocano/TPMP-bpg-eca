@@ -4,6 +4,10 @@ using System.Text;
 
 namespace TPMP_bpg_eca.Nucleo.Modelo
 {
+    /// <summary>
+    /// Representa a un usuario dentro del sistema, gestionando sus datos y 
+    /// e incorpora funcionalidad para dar acceso al sistema de forma segura.
+    /// </summary>
     public class Usuario
     {
         private int      _id;
@@ -12,17 +16,21 @@ namespace TPMP_bpg_eca.Nucleo.Modelo
         private string   _apellido1;
         private string   _apellido2;
         private string   _eMail;
-        private Rol     _rol;
+        private Rol      _rol;
         private Idioma   _idioma;
         private Boolean  _activo;
         private DateTime _fechaCaducidad;
 
-        private string _hashClave;
-        private string _salClave;
+        private string   _hashClave;
+        private string   _salClave;
 
-
-
-        
+        /// <summary>
+        /// Inicializa una nueva instancia de la clase <see cref="Usuario"/> con sus credenciales básicas.
+        /// </summary>
+        /// <param name="id">Identificador único del usuario.</param>
+        /// <param name="cuenta">Nombre de usuario o cuenta de acceso al sistema.</param>
+        /// <param name="eMail">Dirección de correo electrónico principal del usuario.</param>
+        /// <param name="clave">Contraseña en texto plano que será procesada con sal y hash.</param>
         public Usuario(int id, string cuenta, string eMail, string clave)
         {
             _id = id;
@@ -32,38 +40,76 @@ namespace TPMP_bpg_eca.Nucleo.Modelo
             _hashClave = generadorHashClave(clave, _salClave);
         }
 
+        /// <summary>
+        /// Obtiene o establece el identificador único del usuario.
+        /// </summary>
+        /// <value>El número entero que representa el ID del usuario en el sistema.</value>
         public int Id { get { return this._id; } set { this._id = value; } }
 
+        /// <summary>
+        /// Genera una sal criptográfica aleatoria.
+        /// </summary>
+        /// <returns>Una cadena de texto (string) que contiene la sal generada.</returns>
         public string generadorSalClave()
         {
             return "";
         }
+
+        /// <summary>
+        /// Aplica una función hash criptográfica a la clave combinada con su sal correspondiente.
+        /// </summary>
+        /// <param name="clave">La contraseña en texto plano introducida por el usuario.</param>
+        /// <param name="sal">La sal única asociada a este usuario para esta clave.</param>
+        /// <returns>La contraseña cifrada en formato de cadena hash.</returns>
         public string generadorHashClave(string clave, string sal)
         {
             return "";
         }
     }
 
+    /// <summary>
+    /// Representa el rol del usuario en la aplicación.
+    /// </summary>
     public class Rol
     {
         private string _nombre;
 
+        /// <summary>
+        /// Inicializa una nueva instancia de la clase <see cref="Rol"/> especificando su nombre.
+        /// </summary>
+        /// <param name="nombre">El nombre identificativo del rol (ej. "Administrador", "Usuario").</param>
         public Rol(string nombre)
         {
             _nombre = nombre;
         }
+
+        /// <summary>
+        /// Obtiene o establece el nombre del rol.
+        /// </summary>
+        /// <value>Cadena de texto con el nombre descriptivo del rol.</value>
         public string Nombre { get { return this._nombre; } set { this._nombre = value; } }
     }
 
+    /// <summary>
+    /// Representa las preferencias de idioma para un usuario específico.
+    /// </summary>
     public class Idioma
     {
         private string _nombreIdioma;
 
+        /// <summary>
+        /// Inicializa una nueva instancia de la clase <see cref="Idioma"/> definiendo el nombre del idioma.
+        /// </summary>
+        /// <param name="idioma">El nombre del idioma.</param>
         public Idioma(string idioma)
         {
             _nombreIdioma = idioma;
         }
 
+        /// <summary>
+        /// Obtiene o establece el nombre del idioma configurado.
+        /// </summary>
+        /// <value>Cadena de texto con el nombre del idioma.</value>
         public string NombreIdioma { get { return this._nombreIdioma; } set { this._nombreIdioma = value; } }
     }
 
