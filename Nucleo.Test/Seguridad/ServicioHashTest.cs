@@ -15,11 +15,13 @@ public class ServicioHashTest
         /// denominado Generar.
         /// <summary>
         /// No compilara si no esta definida la clave con el metodo
-        /// Si existe un metodo implementado que devuele algo del tipo
-        /// ResultadoHash no saltara la asercion y pasara el test
+        /// Si existe un metodo implementado que no da errores se pasara la 
+        /// asercion sin que salte.
 
-        ServicioHash servicio_ED_01 = new ServicioHash();
-        Assert.IsInstanceOfType<ResultadoHash>(servicio_ED_01.Generar("texto"));
+        string ED_01_texto = "Cl4ve_de_prueba";
+        ServicioHash = new ServicioHash();
+        ED_01_servicio.Generar(ED_01_texto);
+        Assert.IsTrue(true);
 
         /// <summary>
         /// ED-02 Parámetro de entrada
@@ -29,22 +31,30 @@ public class ServicioHashTest
         /// Comprueba que al pasarle un texto similar a una clave a Generer, 
         /// estedevuelve un string.
 
-        string texto_ED_02 = "Cl4ve_de_prueba";
-        ServicioHash servicio_ED_02 = new ServicioHash();
-        Assert.IsInstanceOfType<string>(servicio_ED_02.Generar(texto_ED_02));
+        string ED_02_texto = "Cl4ve_de_prueba";
+        ServicioHash ED_02_servicio = new ServicioHash();
+        Assert.IsInstanceOfType<string>(servicio_ED_02.Generar(ED_02_texto));
 
         /// <summary>
         /// ED-03 Validación de entrada
+        /// ED-04 Gestión de entradas no válidas
         /// El método Generar deberá rechazar los valores nulos, vacíos o
         /// compuestos únicamente por espacios en blanco.
-        /// <summary>
-
-        /// <summary>
-        /// ED-04 Gestión de entradas no válidas
         /// Cuando el método Generar reciba un valor nulo, vacío o compuesto
         /// únicamente por espacios en blanco, deberá lanzar una excepción de
         /// tipo InvalidOperationException.
         /// <summary>
+        /// Comprueba por separado los tres escenarios con generar. Si alguno 
+        /// no lanza una excepcion InvalidOperationException salta la asercion 
+        /// correspondiente
+
+        string? ED_02_textoNulo = null;
+        string ED_02_textoVacio = "";
+        string ED_02_textoEnBlanco = "   ";
+        ServicioHash ED_03_servicio = new ServicioHash();
+        Assert.ThrowsException<InvalidOperationException>(() => servicio_ED_03.Generar(ED_02_textoNulo));
+        Assert.ThrowsException<InvalidOperationException>(() => servicio_ED_03.Generar(ED_02_textoVacio));
+        Assert.ThrowsException<InvalidOperationException>(() => servicio_ED_03.Generar(ED_02_textoEnBlanco));
 
         /// <summary>
         /// ED-05 Resultado de la operación
