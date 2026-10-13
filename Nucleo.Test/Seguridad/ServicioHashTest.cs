@@ -12,6 +12,13 @@ public class ServicioHashTest
         // ED-01 Disponibilidad del método Generar
         // La clase ServicioHash deberá proporcionar un método público
         // denominado Generar.
+
+        // No compilara si no esta definida la clave con el metodo
+        // Si existe un metodo implementado que devuele algo del tipo
+        // ResultadoHash no saltara la asercion y pasara el test
+
+        ServicioHash  servicio_ED_01 = new ServicioHash();
+        Assert.IsInstanceOfType<ResultadoHash>(servicio_ED_01.Generar("texto")); 
         
         // ED-02
         // Parámetro de entrada
