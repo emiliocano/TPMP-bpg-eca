@@ -86,14 +86,17 @@ public class ServicioHashTest
         /// Durante cada ejecución deberá generarse una sal independiente para
         /// utilizarla en el cálculo del hash.
         /// <summary>
-        string ED_06_texto = "Cl4ve_de_prueba";
+        /// Se prueva que dos ejecucines con claves distintas genera una sal 
+        /// independiente para cada una
+        string ED_06_texto1 = "Cl4ve_de_prueba1";
+        string ED_06_texto2 = "Cl4ve_de_prueba2";
         string? ED_06_sal1 = null;
         string? ED_06_sal2 = null;
         ServicioHash ED_06_servicio = new ServicioHash();
         ResultadoHash ED_06_resultado = new ResultadoHash();
-        servicio_ED_06.Generar(ED_06_texto);
+        servicio_ED_06.Generar(ED_06_texto1);
         ED_06_sal1 = ResultadoHash.Sal.get();
-        servicio_ED_06.Generar(ED_06_texto);
+        servicio_ED_06.Generar(ED_06_texto2);
         ED_06_sal2 = ResultadoHash.Sal.get();
         Assert.AreNotEqual(ED_06_sal1, ED_06_sal1);
 
@@ -103,6 +106,16 @@ public class ServicioHashTest
         /// Dos invocaciones independientes del método Generar realizadas con
         /// el mismo texto deberán producir sales diferentes.
         /// <summary>
+        string ED_07_texto = "Cl4ve_de_prueba";
+        string? ED_07_sal1 = null;
+        string? ED_07_sal2 = null;
+        ServicioHash ED_07_servicio = new ServicioHash();
+        ResultadoHash ED_07_resultado = new ResultadoHash();
+        servicio_ED_07.Generar(ED_07_texto);
+        ED_07_sal1 = ResultadoHash.Sal.get();
+        servicio_ED_07.Generar(ED_07_texto1);
+        ED_07_sal2 = ResultadoHash.Sal.get();
+        Assert.AreNotEqual(ED_07_sal1, ED_07_sal1);
 
         /// <summary>
         /// ED-08 Variabilidad de los hashes
