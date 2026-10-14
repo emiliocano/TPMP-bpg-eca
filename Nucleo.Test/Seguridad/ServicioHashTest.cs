@@ -28,18 +28,31 @@ public class ServicioHashTest
         /// El método Generar deberá recibir como parámetro un texto a partir
         /// del cual se generará un hash criptográfico.
         /// <summary>
-        /// Comprueba que al pasarle un texto similar a una clave a Generer, 
-        /// estedevuelve un string.
+        /// Comprueba que al pasarle un texto similar a una clave a Generar, 
+        /// este devuelve un valor no nulo
 
         string ED_02_texto = "Cl4ve_de_prueba";
         ServicioHash ED_02_servicio = new ServicioHash();
-        Assert.IsInstanceOfType<string>(servicio_ED_02.Generar(ED_02_texto));
+        Assert.IsNotNull<>(servicio_ED_02.Generar(ED_02_texto));
 
         /// <summary>
         /// ED-03 Validación de entrada
-        /// ED-04 Gestión de entradas no válidas
         /// El método Generar deberá rechazar los valores nulos, vacíos o
         /// compuestos únicamente por espacios en blanco.
+        /// <summary>
+        /// Comprueba que se lanza una excpcion para rechazar los valores 
+        /// invalidos
+        /// 
+        string? ED_03_textoNulo = null;
+        string ED_03_textoVacio = "";
+        string ED_03_textoEnBlanco = "   ";
+        ServicioHash ED_03_servicio = new ServicioHash();
+        Assert.ThrowsException<Exception>(() => servicio_ED_03.Generar(ED_03_textoNulo));
+        Assert.ThrowsException<Exception>(() => servicio_ED_03.Generar(ED_03_textoVacio));
+        Assert.ThrowsException<Exception>(() => servicio_ED_03.Generar(ED_03_textoEnBlanco));
+
+        /// <summary>
+        /// ED-04 Gestión de entradas no válidas
         /// Cuando el método Generar reciba un valor nulo, vacío o compuesto
         /// únicamente por espacios en blanco, deberá lanzar una excepción de
         /// tipo InvalidOperationException.
@@ -48,25 +61,42 @@ public class ServicioHashTest
         /// no lanza una excepcion InvalidOperationException salta la asercion 
         /// correspondiente
 
-        string? ED_02_textoNulo = null;
-        string ED_02_textoVacio = "";
-        string ED_02_textoEnBlanco = "   ";
-        ServicioHash ED_03_servicio = new ServicioHash();
-        Assert.ThrowsException<InvalidOperationException>(() => servicio_ED_03.Generar(ED_02_textoNulo));
-        Assert.ThrowsException<InvalidOperationException>(() => servicio_ED_03.Generar(ED_02_textoVacio));
-        Assert.ThrowsException<InvalidOperationException>(() => servicio_ED_03.Generar(ED_02_textoEnBlanco));
+        string? ED_04_textoNulo = null;
+        string ED_04_textoVacio = "";
+        string ED_04_textoEnBlanco = "   ";
+        ServicioHash ED_04_servicio = new ServicioHash();
+        Assert.ThrowsException<InvalidOperationException>(() => servicio_ED_04.Generar(ED_04_textoNulo));
+        Assert.ThrowsException<InvalidOperationException>(() => servicio_ED_04.Generar(ED_04_textoVacio));
+        Assert.ThrowsException<InvalidOperationException>(() => servicio_ED_04.Generar(ED_04_textoEnBlanco));
 
         /// <summary>
         /// ED-05 Resultado de la operación
         /// Cuando la operación finalice correctamente, el método Generar deberá
         /// devolver una instancia de la clase ResultadoHash.
         /// <summary>
+        /// Comprueba que el valor devuelto por Generar es de tipo ResultadoHash
+        /// 
+
+        string ED_05_texto = "Cl4ve_de_prueba";
+        ServicioHash ED_05_servicio = new ServicioHash();
+        Assert.IsInstanceOfType<ResultadoHash>(servicio_ED_05.Generar(ED_05_texto));
 
         /// <summary>
         /// ED-06 Generación de la sal
         /// Durante cada ejecución deberá generarse una sal independiente para
         /// utilizarla en el cálculo del hash.
         /// <summary>
+        string ED_06_texto = "Cl4ve_de_prueba";
+        string? ED_06_sal1 = null;
+        string? ED_06_sal2 = null;
+        ServicioHash ED_06_servicio = new ServicioHash();
+        ResultadoHash ED_06_resultado = new ResultadoHash();
+        servicio_ED_06.Generar(ED_06_texto);
+        ED_06_sal1 = ResultadoHash.Sal.get();
+        servicio_ED_06.Generar(ED_06_texto);
+        ED_06_sal2 = ResultadoHash.Sal.get();
+        Assert.AreNotEqual(ED_06_sal1, ED_06_sal1);
+
 
         /// <summary>
         /// ED-07 Unicidad de los resultados
