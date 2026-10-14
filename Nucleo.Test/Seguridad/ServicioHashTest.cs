@@ -47,9 +47,9 @@ public class ServicioHashTest
         string ED_03_textoVacio = "";
         string ED_03_textoEnBlanco = "   ";
         ServicioHash ED_03_servicio = new ServicioHash();
-        Assert.ThrowsException<Exception>(() => servicio_ED_03.Generar(ED_03_textoNulo));
-        Assert.ThrowsException<Exception>(() => servicio_ED_03.Generar(ED_03_textoVacio));
-        Assert.ThrowsException<Exception>(() => servicio_ED_03.Generar(ED_03_textoEnBlanco));
+        Assert.ThrowsException<Exception>(() => ED_03_servicio.Generar(ED_03_textoNulo));
+        Assert.ThrowsException<Exception>(() => ED_03_servicio.Generar(ED_03_textoVacio));
+        Assert.ThrowsException<Exception>(() => ED_03_servicio.Generar(ED_03_textoEnBlanco));
 
         /// <summary>
         /// ED-04 Gestión de entradas no válidas
@@ -65,9 +65,9 @@ public class ServicioHashTest
         string ED_04_textoVacio = "";
         string ED_04_textoEnBlanco = "   ";
         ServicioHash ED_04_servicio = new ServicioHash();
-        Assert.ThrowsException<InvalidOperationException>(() => servicio_ED_04.Generar(ED_04_textoNulo));
-        Assert.ThrowsException<InvalidOperationException>(() => servicio_ED_04.Generar(ED_04_textoVacio));
-        Assert.ThrowsException<InvalidOperationException>(() => servicio_ED_04.Generar(ED_04_textoEnBlanco));
+        Assert.ThrowsException<InvalidOperationException>(() => ED_04_servicio.Generar(ED_04_textoNulo));
+        Assert.ThrowsException<InvalidOperationException>(() => ED_04_servicio.Generar(ED_04_textoVacio));
+        Assert.ThrowsException<InvalidOperationException>(() => ED_04_servicio.Generar(ED_04_textoEnBlanco));
 
         /// <summary>
         /// ED-05 Resultado de la operación
@@ -75,11 +75,15 @@ public class ServicioHashTest
         /// devolver una instancia de la clase ResultadoHash.
         /// <summary>
         /// Comprueba que el valor devuelto por Generar es de tipo ResultadoHash
-        /// 
+        /// Comprueba que se genera un hash no vacio
+        /// Comprueba que se genera una sal no vacio
 
         string ED_05_texto = "Cl4ve_de_prueba";
         ServicioHash ED_05_servicio = new ServicioHash();
-        Assert.IsInstanceOfType<ResultadoHash>(servicio_ED_05.Generar(ED_05_texto));
+        ResultadoHash ED_05_resultado = ED_05_servicio.Generar(ED_05_texto);
+        Assert.IsInstanceOfType<ResultadoHash>(ED_05_resultado);
+        Assert.IsFalse(ED_05_resultado.Hash.Get().length() == 0);
+        Assert.IsFalse(ED_05_resultado.Sal.Get().length() == 0);
 
         /// <summary>
         /// ED-06 Generación de la sal
@@ -93,12 +97,11 @@ public class ServicioHashTest
         string? ED_06_sal1 = null;
         string? ED_06_sal2 = null;
         ServicioHash ED_06_servicio = new ServicioHash();
-        ResultadoHash ED_06_resultado = new ResultadoHash();
-        servicio_ED_06.Generar(ED_06_texto1);
-        ED_06_sal1 = ResultadoHash.Sal.get();
-        servicio_ED_06.Generar(ED_06_texto2);
-        ED_06_sal2 = ResultadoHash.Sal.get();
-        Assert.AreNotEqual(ED_06_sal1, ED_06_sal1);
+        ResultadoHash ED_06_resultado1 = ED_06_servicio.Generar(ED_06_texto1);
+        ResultadoHash ED_06_resultado2 = ED_06_servicio.Generar(ED_06_texto2);
+        ED_06_sal1 = ED_06_resultado1.Sal.get();
+        ED_06_sal2 = ED_06_resultado2.Sal.get();
+        Assert.AreNotEqual(ED_06_sal1, ED_06_sal2);
 
 
         /// <summary>
@@ -106,28 +109,53 @@ public class ServicioHashTest
         /// Dos invocaciones independientes del método Generar realizadas con
         /// el mismo texto deberán producir sales diferentes.
         /// <summary>
+        /// Se genera un hash con su sal dos veces con la misma clave y se 
+        /// comprueba que las sales son distintas
         string ED_07_texto = "Cl4ve_de_prueba";
         string? ED_07_sal1 = null;
         string? ED_07_sal2 = null;
         ServicioHash ED_07_servicio = new ServicioHash();
-        ResultadoHash ED_07_resultado = new ResultadoHash();
-        servicio_ED_07.Generar(ED_07_texto);
-        ED_07_sal1 = ResultadoHash.Sal.get();
-        servicio_ED_07.Generar(ED_07_texto1);
-        ED_07_sal2 = ResultadoHash.Sal.get();
-        Assert.AreNotEqual(ED_07_sal1, ED_07_sal1);
+        ResultadoHash ED_07_resultado1 = ED_07_servicio.Generar(ED_07_texto);
+        ED_07_sal1 = ED_07_resultado1.Sal.get();
+        ResultadoHash ED_07_resultado2 = ED_07_servicio.Generar(ED_07_texto);
+        ED_07_sal2 = ED_07_resultado2.Sal.get();
+        Assert.AreNotEqual(ED_07_sal1, ED_07_sal2);
 
         /// <summary>
         /// ED-08 Variabilidad de los hashes
         /// Como consecuencia del uso de sales diferentes, dos invocaciones
         /// realizadas con el mismo texto deberán producir hashes diferentes.
         /// <summary>
+        /// Se genera un hash con su sal dos veces con la misma clave y se 
+        /// comprueba que los hashes son distintas
+        string ED_08_texto = "Cl4ve_de_prueba";
+        string? ED_08_hash1 = null;
+        string? ED_08_hash2 = null;
+        ServicioHash ED_08_servicio = new ServicioHash();
+        ResultadoHash ED_08_resultado1 = ED_08_servicio.Generar(ED_08_texto);
+        ED_08_hash1 = ED_08_resultado1.Hash.get();
+        ResultadoHash ED_08_resultado2 = ED_08_servicio.Generar(ED_08_texto);
+        ED_08_hash2 = ED_08_resultado2.Hash.get();
+        Assert.AreNotEqual(ED_08_hash1, ED_08_hash2);
 
         /// <summary>
         /// ED-09 Integridad del resultado
         /// La instancia devuelta deberá contener valores válidos para todas
         /// sus propiedades.
         /// <summary>
+        /// Se genera la sal y el hash a partir de una clave y se comprueba
+        /// que los valores sonvalidos
+        string ED_09_texto = "Cl4ve_de_prueba";
+        string? ED_09_sal = null;
+        string? ED_09_hash = null;
+        ServicioHash ED_09_servicio = new ServicioHash();
+        ResultadoHash ED_09_resultado = ED_09_servicio.Generar(ED_09_texto);
+        ED_09_sal = ED_09_resultado.Sal.get();
+        ED_09_hash = ED_09_resultado.Sal.get();
+        Assert.IsTrue(ED_09_servicio.Verificar(ED_09_texto,ED_09_hash,ED_09_sal));
+
+
+
 
     }
 
