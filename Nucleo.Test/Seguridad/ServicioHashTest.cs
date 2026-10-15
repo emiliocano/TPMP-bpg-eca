@@ -14,18 +14,18 @@ public class ServicioHashTest
         /// La clase ServicioHash deberá proporcionar un método público
         /// denominado Generar.
         /// <summary>
-        /// No compilara si no esta definida la clave con el metodo
+        /// No compilara si no esta definida la clase con el metodo
         /// Si existe un metodo implementado que no da errores se pasara la 
         /// asercion sin que salte.
 
         string ED_01_texto = "Cl4ve_de_prueba";
-        ServicioHash = new ServicioHash();
+        ServicioHash ED_01_servicio  = new ServicioHash();
         ED_01_servicio.Generar(ED_01_texto);
         Assert.IsTrue(true);
     }
 
     [TestMethod]
-    public void Parametro_de_entrada_texto()
+    public void Parametro_de_entrada_texto_en_generar()
     {
         /// <summary>
         /// ED-02 Parámetro de entrada
@@ -34,7 +34,6 @@ public class ServicioHashTest
         /// <summary>
         /// Comprueba que al pasarle un texto similar a una clave a Generar, 
         /// este devuelve un valor no nulo
-
         string ED_02_texto = "Cl4ve_de_prueba";
         ServicioHash ED_02_servicio = new ServicioHash();
         Assert.IsNotNull<>(servicio_ED_02.Generar(ED_02_texto));
@@ -45,7 +44,7 @@ public class ServicioHashTest
     [DataRow("")]
     [DataRow(" ")]
     [DataRow("    ")]
-    public void Validacion_de_entrada(string? ED_03_texto)
+    public void Validacion_de_entrada_en_generar(string? ED_03_texto)
     {
         /// <summary>
         /// ED-03 Validación de entrada
@@ -56,7 +55,7 @@ public class ServicioHashTest
         /// invalidos
         /// 
         ServicioHash ED_03_servicio = new ServicioHash();
-        Assert.ThrowsException<Exception>(() => ED_03_servicio.Generar(ED_03_texto));
+        Assert.Throws<Exception>(() => ED_03_servicio.Generar(ED_03_texto));
     }
 
     [TestMethod]
@@ -64,7 +63,7 @@ public class ServicioHashTest
     [DataRow("")]
     [DataRow(" ")]
     [DataRow("    ")]
-    public void Gestion_de_entradas_no_validas(string? ED_04_texto)
+    public void Gestion_de_entradas_no_validas_en_generar(string? ED_04_texto)
     {
         /// <summary>
         /// ED-04 Gestión de entradas no válidas
@@ -76,11 +75,11 @@ public class ServicioHashTest
         /// no lanza una excepcion InvalidOperationException salta la asercion 
         /// correspondiente
         ServicioHash ED_04_servicio = new ServicioHash();
-        Assert.ThrowsException<InvalidOperationException>(() => ED_04_servicio.Generar(ED_04_texto));
+        Assert.Throws<InvalidOperationException>(() => ED_04_servicio.Generar(ED_04_texto));
     }
 
     [TestMethod]
-    public void Resultado_de_la_operacion()
+    public void Resultado_de_la_operacion_generar()
     {
         /// <summary>
         /// ED-05 Resultado de la operación
@@ -142,7 +141,7 @@ public class ServicioHashTest
     }
 
     [TestMethod]
-    public void Variabilidad_de_los_hashes()
+    public void Variabilidad_de_los_hashes_de_generar()
     {
         /// <summary>
         /// ED-08 Variabilidad de los hashes
@@ -163,7 +162,7 @@ public class ServicioHashTest
     }
 
     [TestMethod]
-    public void Integridad_del_resultado()
+    public void Integridad_del_resultado_de_generar()
     {
         /// <summary>
         /// ED-09 Integridad del resultado
@@ -205,54 +204,95 @@ public class ServicioHashTest
         Assert.IsNotNull(ED_EX_servicio.Verificar(ED_EX_texto, ED_EX_hash, ED_EX_sal));
     }
 
-    // Método validación
+    // Método verificar
 
     [TestMethod]
-    public void Verificar_validacion()
+    public void Disponibilidad_del_metodo_verificar()
     {
         /// <summary>
         /// ED-10 Disponibilidad del método
         /// La clase ServicioHash deberá proporcionar un método público
         /// denominado Verificar.
         /// <summary>
+        /// No compilara si no esta definida la clase con el método
+        /// Si existe un método implementado que no da errores se pasara la 
+        /// aserción sin que salte.
+        string ED_10_texto = "Cl4ve_de_prueba";
+        ServicioHash ED_10_servicio  = new ServicioHash();
+        ResultadoHash ED_10_resultado.Generar(ED_10_texto);
+        ED_10_servicio.Verificar(ED_10_texto, ED_10_resultado.Hash.Get(), ED_10_resultado.Salt.get());
+        Assert.IsTrue(true);
+    }
 
+    [TestMethod]
+    public void Parametro_de_entrada_de_validacion()
+    {
         /// <summary>
         /// ED-11 Parámetro de entrada
         /// El método deberá recibir: el texto a comprobar, el hash almacenado
         /// y la sal utilizada durante la generación del hash.
         /// <summary>
+        /// Comprueba que al pasarle texto, hash y sal validos genera un booleano
+        string ED_11_texto = "Cl4ve_de_prueba";
+        ServicioHash ED_11_servicio = new ServicioHash();
+        ResultadoHash ED_11_resultado.Generar(ED_10_texto);
+        Assert.IsNotInstanceOfType<Boolean>(ED_11_servicio.Verificar(ED_11_texto, ED_11_resultado.Hash.Get(), ED_11_resultado.Salt.get()));
+    }
 
+    [TestMethod]
+    public void Verificacion_correcta_con_validacion()
+    {
         /// <summary>
         /// ED-12 Verificación correcta
         /// El método deberá devolver true cuando el texto recibido corresponda
         /// al texto utilizado para generar el hash indicado y se proporcione
         /// la sal asociada.
         /// <summary>
+    }
 
+    [TestMethod]
+    public void Verificacion_incorrecta_con_validacion()
+    {
         /// <summary>
         /// ED-13 Verificación incorrecta
         /// El método deberá devolver false cuando el texto recibido no
         /// corresponda al utilizado durante la generación del hash.
         /// <summary>
+    }
 
+    [TestMethod]
+    public void Validación_de_parámetros_de_validacion()
+    {
         /// <summary>
         /// ED-14  Validación de parámetros
         /// El método deberá devolver false cuando cualquiera de los parámetros
         /// recibidos sea nulo, vacío o contenga únicamente espacios en blanco.
         /// <summary>
+    }
 
+    [TestMethod]
+    public void Gestion_de_datos_invalidos_en_validacion()
+    {
         /// <summary>
         /// ED-15 Gestión de datos inválidos
         /// El método deberá gestionar de forma controlada los datos de entrada
         /// con formato incorrecto.
         /// <summary>
+    }
 
+    [TestMethod]
+    public void Comportamiento_ante_formatos_incorrectos_en_validacion()
+    {
         /// <summary>
         /// ED-16 Comportamiento ante formatos incorrectos
         /// Si el hash o la sal almacenados presentan un formato no válido,
         /// el método deberá devolver false.
         /// <summary>
+    }
 
+    [TestMethod]
+    public void Robustez_de_validacion()
+    {
         /// <summary>
         /// ED-17 Robustez
         /// El método no deberá propagar excepciones provocadas por datos
