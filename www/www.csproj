@@ -10,4 +10,8 @@
     <Folder Include="wwwroot\css\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Nucleo\Nucleo.csproj" />
+  </ItemGroup>
+
 </Project>
