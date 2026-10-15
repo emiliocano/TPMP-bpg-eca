@@ -21,7 +21,7 @@ public static class ServicioContrasenas
     public static bool EsValida(string contrasena)
     {
         return !string.IsNullOrWhiteSpace(contrasena)
-            && contrasena.Length >= 8
+            && contrasena.Length >= 12
             && contrasena.Any(char.IsUpper)
             && contrasena.Any(char.IsLower)
             && contrasena.Any(char.IsDigit)
