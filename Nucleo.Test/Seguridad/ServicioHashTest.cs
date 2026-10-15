@@ -7,7 +7,7 @@ namespace TPMP_bpg_eca.Nucleo.Test;
 public class ServicioHashTest
 {
     [TestMethod]
-    public void Generar_validacion()
+    public void Disponibilidad_de_Generar()
     {
         /// <summary>
         /// ED-01 Disponibilidad del método Generar
@@ -22,7 +22,11 @@ public class ServicioHashTest
         ServicioHash = new ServicioHash();
         ED_01_servicio.Generar(ED_01_texto);
         Assert.IsTrue(true);
+    }
 
+    [TestMethod]
+    public void Parametro_de_entrada_texto()
+    {
         /// <summary>
         /// ED-02 Parámetro de entrada
         /// El método Generar deberá recibir como parámetro un texto a partir
@@ -34,7 +38,15 @@ public class ServicioHashTest
         string ED_02_texto = "Cl4ve_de_prueba";
         ServicioHash ED_02_servicio = new ServicioHash();
         Assert.IsNotNull<>(servicio_ED_02.Generar(ED_02_texto));
+    }
 
+    [TestMethod]
+    [DataRow(null)]
+    [DataRow("")]
+    [DataRow(" ")]
+    [DataRow("    ")]
+    public void Validacion_de_entrada(string? ED_03_texto)
+    {
         /// <summary>
         /// ED-03 Validación de entrada
         /// El método Generar deberá rechazar los valores nulos, vacíos o
@@ -43,14 +55,17 @@ public class ServicioHashTest
         /// Comprueba que se lanza una excpcion para rechazar los valores 
         /// invalidos
         /// 
-        string? ED_03_textoNulo = null;
-        string ED_03_textoVacio = "";
-        string ED_03_textoEnBlanco = "   ";
         ServicioHash ED_03_servicio = new ServicioHash();
-        Assert.ThrowsException<Exception>(() => ED_03_servicio.Generar(ED_03_textoNulo));
-        Assert.ThrowsException<Exception>(() => ED_03_servicio.Generar(ED_03_textoVacio));
-        Assert.ThrowsException<Exception>(() => ED_03_servicio.Generar(ED_03_textoEnBlanco));
+        Assert.ThrowsException<Exception>(() => ED_03_servicio.Generar(ED_03_texto));
+    }
 
+    [TestMethod]
+    [DataRow(null)]
+    [DataRow("")]
+    [DataRow(" ")]
+    [DataRow("    ")]
+    public void Gestion_de_entradas_no_validas(string? ED_04_texto)
+    {
         /// <summary>
         /// ED-04 Gestión de entradas no válidas
         /// Cuando el método Generar reciba un valor nulo, vacío o compuesto
@@ -60,15 +75,13 @@ public class ServicioHashTest
         /// Comprueba por separado los tres escenarios con generar. Si alguno 
         /// no lanza una excepcion InvalidOperationException salta la asercion 
         /// correspondiente
-
-        string? ED_04_textoNulo = null;
-        string ED_04_textoVacio = "";
-        string ED_04_textoEnBlanco = "   ";
         ServicioHash ED_04_servicio = new ServicioHash();
-        Assert.ThrowsException<InvalidOperationException>(() => ED_04_servicio.Generar(ED_04_textoNulo));
-        Assert.ThrowsException<InvalidOperationException>(() => ED_04_servicio.Generar(ED_04_textoVacio));
-        Assert.ThrowsException<InvalidOperationException>(() => ED_04_servicio.Generar(ED_04_textoEnBlanco));
+        Assert.ThrowsException<InvalidOperationException>(() => ED_04_servicio.Generar(ED_04_texto));
+    }
 
+    [TestMethod]
+    public void Resultado_de_la_operacion()
+    {
         /// <summary>
         /// ED-05 Resultado de la operación
         /// Cuando la operación finalice correctamente, el método Generar deberá
@@ -77,14 +90,17 @@ public class ServicioHashTest
         /// Comprueba que el valor devuelto por Generar es de tipo ResultadoHash
         /// Comprueba que se genera un hash no vacio
         /// Comprueba que se genera una sal no vacio
-
         string ED_05_texto = "Cl4ve_de_prueba";
         ServicioHash ED_05_servicio = new ServicioHash();
         ResultadoHash ED_05_resultado = ED_05_servicio.Generar(ED_05_texto);
         Assert.IsInstanceOfType<ResultadoHash>(ED_05_resultado);
         Assert.IsFalse(ED_05_resultado.Hash.Get().length() == 0);
         Assert.IsFalse(ED_05_resultado.Sal.Get().length() == 0);
+    }
 
+    [TestMethod]
+    public void Generacion_de_sal_independiente()
+    {
         /// <summary>
         /// ED-06 Generación de la sal
         /// Durante cada ejecución deberá generarse una sal independiente para
@@ -102,8 +118,11 @@ public class ServicioHashTest
         ED_06_sal1 = ED_06_resultado1.Sal.get();
         ED_06_sal2 = ED_06_resultado2.Sal.get();
         Assert.AreNotEqual(ED_06_sal1, ED_06_sal2);
+    }
 
-
+    [TestMethod]
+    public void Unicidad_de_resultados_sal_nueva_cada_generacion()
+    {
         /// <summary>
         /// ED-07 Unicidad de los resultados
         /// Dos invocaciones independientes del método Generar realizadas con
@@ -120,7 +139,11 @@ public class ServicioHashTest
         ResultadoHash ED_07_resultado2 = ED_07_servicio.Generar(ED_07_texto);
         ED_07_sal2 = ED_07_resultado2.Sal.get();
         Assert.AreNotEqual(ED_07_sal1, ED_07_sal2);
+    }
 
+    [TestMethod]
+    public void Variabilidad_de_los_hashes()
+    {
         /// <summary>
         /// ED-08 Variabilidad de los hashes
         /// Como consecuencia del uso de sales diferentes, dos invocaciones
@@ -137,7 +160,11 @@ public class ServicioHashTest
         ResultadoHash ED_08_resultado2 = ED_08_servicio.Generar(ED_08_texto);
         ED_08_hash2 = ED_08_resultado2.Hash.get();
         Assert.AreNotEqual(ED_08_hash1, ED_08_hash2);
+    }
 
+    [TestMethod]
+    public void Integridad_del_resultado()
+    {
         /// <summary>
         /// ED-09 Integridad del resultado
         /// La instancia devuelta deberá contener valores válidos para todas
@@ -151,13 +178,34 @@ public class ServicioHashTest
         ServicioHash ED_09_servicio = new ServicioHash();
         ResultadoHash ED_09_resultado = ED_09_servicio.Generar(ED_09_texto);
         ED_09_sal = ED_09_resultado.Sal.get();
-        ED_09_hash = ED_09_resultado.Sal.get();
+        ED_09_hash = ED_09_resultado.Hash.get();
         Assert.IsTrue(ED_09_servicio.Verificar(ED_09_texto,ED_09_hash,ED_09_sal));
-
-
-
-
     }
+
+    [TestMethod]
+    [DataRow(null)]
+    [DataRow("")]
+    [DataRow(" ")]
+    [DataRow("    ")]
+    public void Generar_nunca_devvuelve_valores_nulos(string? ED_EX_texto)
+    {
+        /// <summary>
+        /// ED-Extra El método nunca debe devolver valores nulos
+        /// Con claves validas o invalidas el metodo no debe devolver un valor
+        /// nulo
+        /// <summary>
+        /// Se prueba una clave valida y una invalida con cada condicion y se
+        /// comprueba que el resultado no es nulo
+        string? ED_EX_sal = null;
+        string? ED_EX_hash = null;
+        ServicioHash ED_EX_servicio = new ServicioHash();
+        ResultadoHash ED_EX_resultado = ED_EX_servicio.Generar(ED_EX_texto);
+        ED_EX_sal = ED_EX_resultado.Sal.get();
+        ED_EX_hash = ED_EX_resultado.Hash.get();
+        Assert.IsNotNull(ED_EX_servicio.Verificar(ED_EX_texto, ED_EX_hash, ED_EX_sal));
+    }
+
+    // Método validación
 
     [TestMethod]
     public void Verificar_validacion()
