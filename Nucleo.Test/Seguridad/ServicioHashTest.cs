@@ -235,7 +235,7 @@ public class ServicioHashTest
         /// Comprueba que al pasarle texto, hash y sal validos genera un booleano
         string ED_11_texto = "Cl4ve_de_prueba";
         ServicioHash ED_11_servicio = new ServicioHash();
-        ResultadoHash ED_11_resultado.Generar(ED_10_texto);
+        ResultadoHash ED_11_resultado.Generar(ED_11_texto);
         Assert.IsNotInstanceOfType<Boolean>(ED_11_servicio.Verificar(ED_11_texto, ED_11_resultado.Hash.Get(), ED_11_resultado.Salt.get()));
     }
 
@@ -248,6 +248,12 @@ public class ServicioHashTest
         /// al texto utilizado para generar el hash indicado y se proporcione
         /// la sal asociada.
         /// <summary>
+        /// Se genera una sal y un hash a partir de un texto y se prueba que
+        /// la verificacionde los tres valores es correcta.
+        string ED_12_texto = "Cl4ve_de_prueba";
+        ServicioHash ED_12_servicio = new ServicioHash();
+        ResultadoHash ED_12_resultado.Generar(ED_12_texto);
+        Assert.IsTrue(ED_12_servicio.Verificar(ED_12_texto, ED_12_resultado.Hash.Get(), ED_12_resultado.Salt.get()));
     }
 
     [TestMethod]
@@ -258,6 +264,25 @@ public class ServicioHashTest
         /// El método deberá devolver false cuando el texto recibido no
         /// corresponda al utilizado durante la generación del hash.
         /// <summary>
+        /// Se genera una sal y un hash a partir de un texto y se prueba que
+        /// la verificacionde los tres valores es correcta y que cambiando cada
+        /// uno de los tres valores el resultado es clave falsa
+        string ED_13_texto = "Cl4ve_de_prueba";
+        string ED_13_texto2 = "Cl4ve_de_prueb4";
+        string? ED_13_Sal = null;
+        string? ED_13_Hash = null;
+        string? ED_13_nuevaSal = null;
+        string? ED_13_nuevoHash = null;
+        ServicioHash ED_13_servicio = new ServicioHash();
+        ResultadoHash ED_13_resultado.Generar(ED_13_texto);
+        ED_13_Sal = ED_13_resultado.Sal.get();
+        ED_13_Hash = ED_13_resultado.Hash.get();
+        ED_13_nuevaSal = (ED_13_Sal[0] == 'a' ? 'b' : 'a') + ED_13_Sal[1..];
+        ED_13_nuevoHash = (ED_13_Hash[0] == 'a' ? 'b' : 'a') + ED_13_Hash[1..];
+        Assert.IsTrue(ED_13_servicio.Verificar(ED_13_texto, ED_13_Hash, ED_13_Sal));
+        Assert.IsFalse(ED_13_servicio.Verificar(ED_13_texto2, ED_13_Hash, ED_13_Sal)); // cambia la clave
+        Assert.IsFalse(ED_13_servicio.Verificar(ED_13_texto, ED_13_Hash, ED_13_nuevaSal)); // cambia la salt
+        Assert.IsFalse(ED_13_servicio.Verificar(ED_13_texto, ED_13_nuevoHash, ED_13_Sal)); // cambia el hash
     }
 
     [TestMethod]
