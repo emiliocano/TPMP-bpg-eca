@@ -10,9 +10,15 @@ public class ResultadoHashTest
     [TestMethod]
     public void Almacenamiento_del_hash_de_resuladoHash()
     {
-        // ED-18 Especificaciones del Almacenamiento del hash
-        // La clase ResultadoHash deberá disponer de una propiedad denominada
-        // Hash destinada a contener el hash generado.
+        // Comprueba que se conserva el hash asignado
+        string hashEsperado = "aB12cD34eF56";
+
+        ResultadoHash resultado = new ResultadoHash
+        {
+            Hash = hashEsperado
+        };
+
+        Assert.AreEqual(hashEsperado, resultado.Hash);
     }
 
     [TestMethod]
