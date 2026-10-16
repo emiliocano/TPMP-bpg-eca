@@ -8,24 +8,24 @@ public class ServicioContrasenasTest
     [TestMethod]
     public void ServicioContrasenas_Validacion()
     {
-        // Sin contenido.
+        // Sin contenido
         Assert.IsFalse(ServicioContrasenas.EsValida(null!));
         Assert.IsFalse(ServicioContrasenas.EsValida(""));
         Assert.IsFalse(ServicioContrasenas.EsValida("            "));
-        // Longitudes de 11, 12 y 13 caracteres.
+        // Longitudes de 11, 12 y 13 caracteres
         Assert.IsFalse(ServicioContrasenas.EsValida("ClaveSegu1!"));
         Assert.IsTrue(ServicioContrasenas.EsValida("ClaveSegur1!"));
         Assert.IsTrue(ServicioContrasenas.EsValida("ClaveSegur12!"));
-        // Falta una mayúscula.
+        // Falta una mayúscula
         Assert.IsFalse(ServicioContrasenas.EsValida("clavesegur1!"));
 
-        // Falta una minúscula.
+        // Falta una minuscula
         Assert.IsFalse(ServicioContrasenas.EsValida("CLAVESEGUR1!"));
 
-        // Falta un número.
+        // Falta un numero
         Assert.IsFalse(ServicioContrasenas.EsValida("ClaveSegura!"));
 
-        // Falta un carácter especial.
+        // Falta un caracter especial
         Assert.IsFalse(ServicioContrasenas.EsValida("ClaveSegur12"));
     }
 }
