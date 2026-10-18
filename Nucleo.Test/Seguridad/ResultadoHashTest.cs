@@ -38,9 +38,13 @@ public class ResultadoHashTest
     [TestMethod]
     public void Consistencia_del_resultado_de_resuladoHash()
     {
-        // ED - 20 Consistencia del resultado
-        // Toda instancia de ResultadoHash devuelta por el componente deberá
-        // contener valores no nulos y no vacíos para las propiedades Hash y Sal..
+        // Genera un resultado a partir de un texto válido
+        ResultadoHash resultado = ServicioHash.Generar("ClaveSegur1!");
+
+        // Comprueba que el resultado contiene hash y sal
+        Assert.IsNotNull(resultado);
+        Assert.IsFalse(string.IsNullOrEmpty(resultado.Hash));
+        Assert.IsFalse(string.IsNullOrEmpty(resultado.Sal));
 
     }
 }
