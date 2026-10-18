@@ -24,10 +24,15 @@ public class ResultadoHashTest
     [TestMethod]
     public void Almacenamiento_de_la_sal_de_resuladoHash()
     {
-        // ED - 19 Almacenamiento de la sal
-        // La clase ResultadoHash deberá disponer de una propiedad denominada
-        // Sal destinada a contener la sal utilizada durante el proceso de
-        // generación.
+        // Comprueba que se conserva la sal asignada
+        string salEsperada = "sAl123456789";
+
+        ResultadoHash resultado = new ResultadoHash
+        {
+            Sal = salEsperada
+        };
+
+        Assert.AreEqual(salEsperada, resultado.Sal);
     }
 
     [TestMethod]
