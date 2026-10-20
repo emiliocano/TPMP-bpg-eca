@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <Folder Include="Validacion\" />
-    <Folder Include="Seguridad\" />
   </ItemGroup>
 
 </Project>
