@@ -1,8 +1,10 @@
+using System.Diagnostics.CodeAnalysis;
 using TPMP_bpg_eca.Nucleo.Seguridad;
 
 namespace TPMP_bpg_eca.Nucleo.Test;
 
 [TestClass]
+[ExcludeFromCodeCoverage]
 public class ServicioContrasenasTest
 {
     [TestMethod]

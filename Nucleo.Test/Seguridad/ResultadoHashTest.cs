@@ -1,10 +1,12 @@
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.ConstrainedExecution;
 using TPMP_bpg_eca.Nucleo.Seguridad;
 
 namespace TPMP_bpg_eca.Nucleo.Test;
 
 [TestClass]
+[ExcludeFromCodeCoverage]
 public class ResultadoHashTest
 {
     [TestMethod]

@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using TPMP_bpg_eca.Nucleo.Seguridad;
 using static System.Net.Mime.MediaTypeNames;
@@ -5,6 +6,7 @@ using static System.Net.Mime.MediaTypeNames;
 namespace TPMP_bpg_eca.Nucleo.Test;
 
 [TestClass]
+[ExcludeFromCodeCoverage]
 public class ServicioHashTest
 {
     [TestMethod]
@@ -20,8 +22,9 @@ public class ServicioHashTest
         /// asercion sin que salte.
 
         string ED_01_texto = "Cl4ve_de_prueba";
-        ServicioHash ED_01_servicio  = new ServicioHash();
-        ED_01_servicio.Generar(ED_01_texto);
+//        ServicioHash ED_01_servicio  = new ServicioHash();
+//        ED_01_servicio.Generar(ED_01_texto);
+        ServicioHash.Generar(ED_01_texto);
         Assert.IsTrue(true);
     }
 
@@ -36,9 +39,10 @@ public class ServicioHashTest
         /// Comprueba que al pasarle un texto similar a una clave a Generar, 
         /// este devuelve un valor no nulo
         string ED_02_texto = "Cl4ve_de_prueba";
-        Boolean? resultado = null;
-        ServicioHash ED_02_servicio = new ServicioHash();
-        resultado = ED_02_servicio.Generar(ED_02_texto);
+        ResultadoHash? resultado = null;
+//        ServicioHash ED_02_servicio = new ServicioHash();
+//        resultado = ED_02_servicio.Generar(ED_02_texto);
+        resultado = ServicioHash.Generar(ED_02_texto);
         Assert.IsNotNull(resultado);
     }
 
@@ -57,8 +61,8 @@ public class ServicioHashTest
         /// Comprueba que se lanza una excpcion para rechazar los valores 
         /// invalidos
         /// 
-        ServicioHash ED_03_servicio = new ServicioHash();
-        Assert.Throws<Exception>(() => ED_03_servicio.Generar(ED_03_texto));
+//        ServicioHash ED_03_servicio = new ServicioHash();
+        Assert.Throws<Exception>(() => ServicioHash.Generar(ED_03_texto));
     }
 
     [TestMethod]
@@ -77,8 +81,8 @@ public class ServicioHashTest
         /// Comprueba por separado los tres escenarios con generar. Si alguno 
         /// no lanza una excepcion InvalidOperationException salta la asercion 
         /// correspondiente
-        ServicioHash ED_04_servicio = new ServicioHash();
-        Assert.Throws<InvalidOperationException>(() => ED_04_servicio.Generar(ED_04_texto));
+//        ServicioHash ED_04_servicio = new ServicioHash();
+        Assert.Throws<InvalidOperationException>(() => ServicioHash.Generar(ED_04_texto));
     }
 
     [TestMethod]
@@ -94,12 +98,12 @@ public class ServicioHashTest
         /// Comprueba que se genera una sal no vacio
         string ED_05_texto = "Cl4ve_de_prueba";
         Boolean? resultado = null;
-        ServicioHash ED_05_servicio = new ServicioHash();
-        ResultadoHash ED_05_resultado = ED_05_servicio.Generar(ED_05_texto);
+//        ServicioHash ED_05_servicio = new ServicioHash();
+        ResultadoHash ED_05_resultado = ServicioHash.Generar(ED_05_texto);
         Assert.IsInstanceOfType<ResultadoHash>(ED_05_resultado);
-        resultado = ED_05_resultado.Hash.Get().length() == 0;
-        Assert.IsFalse(ED_05_resultado.Hash.Get().length() == 0);
-        resultado = ED_05_resultado.Sal.Get().length() == 0;
+        resultado = ED_05_resultado.Hash.Length == 0;
+        Assert.IsFalse(resultado);
+        resultado = ED_05_resultado.Sal.Length == 0;
         Assert.IsFalse(resultado);
     }
 
@@ -117,11 +121,11 @@ public class ServicioHashTest
         string ED_06_texto2 = "Cl4ve_de_prueba2";
         string? ED_06_sal1 = null;
         string? ED_06_sal2 = null;
-        ServicioHash ED_06_servicio = new ServicioHash();
-        ResultadoHash ED_06_resultado1 = ED_06_servicio.Generar(ED_06_texto1);
-        ResultadoHash ED_06_resultado2 = ED_06_servicio.Generar(ED_06_texto2);
-        ED_06_sal1 = ED_06_resultado1.Sal.get();
-        ED_06_sal2 = ED_06_resultado2.Sal.get();
+//        ServicioHash ED_06_servicio = new ServicioHash();
+        ResultadoHash ED_06_resultado1 = ServicioHash.Generar(ED_06_texto1);
+        ResultadoHash ED_06_resultado2 = ServicioHash.Generar(ED_06_texto2);
+        ED_06_sal1 = ED_06_resultado1.Sal;
+        ED_06_sal2 = ED_06_resultado2.Sal;
         Assert.AreNotEqual(ED_06_sal1, ED_06_sal2);
     }
 
@@ -138,11 +142,11 @@ public class ServicioHashTest
         string ED_07_texto = "Cl4ve_de_prueba";
         string? ED_07_sal1 = null;
         string? ED_07_sal2 = null;
-        ServicioHash ED_07_servicio = new ServicioHash();
-        ResultadoHash ED_07_resultado1 = ED_07_servicio.Generar(ED_07_texto);
-        ED_07_sal1 = ED_07_resultado1.Sal.get();
-        ResultadoHash ED_07_resultado2 = ED_07_servicio.Generar(ED_07_texto);
-        ED_07_sal2 = ED_07_resultado2.Sal.get();
+//        ServicioHash ED_07_servicio = new ServicioHash();
+        ResultadoHash ED_07_resultado1 = ServicioHash.Generar(ED_07_texto);
+        ED_07_sal1 = ED_07_resultado1.Sal;
+        ResultadoHash ED_07_resultado2 = ServicioHash.Generar(ED_07_texto);
+        ED_07_sal2 = ED_07_resultado2.Sal;
         Assert.AreNotEqual(ED_07_sal1, ED_07_sal2);
     }
 
@@ -159,11 +163,11 @@ public class ServicioHashTest
         string ED_08_texto = "Cl4ve_de_prueba";
         string? ED_08_hash1 = null;
         string? ED_08_hash2 = null;
-        ServicioHash ED_08_servicio = new ServicioHash();
-        ResultadoHash ED_08_resultado1 = ED_08_servicio.Generar(ED_08_texto);
-        ED_08_hash1 = ED_08_resultado1.Hash.get();
-        ResultadoHash ED_08_resultado2 = ED_08_servicio.Generar(ED_08_texto);
-        ED_08_hash2 = ED_08_resultado2.Hash.get();
+//        ServicioHash ED_08_servicio = new ServicioHash();
+        ResultadoHash ED_08_resultado1 = ServicioHash.Generar(ED_08_texto);
+        ED_08_hash1 = ED_08_resultado1.Hash;
+        ResultadoHash ED_08_resultado2 = ServicioHash.Generar(ED_08_texto);
+        ED_08_hash2 = ED_08_resultado2.Hash;
         Assert.AreNotEqual(ED_08_hash1, ED_08_hash2);
     }
 
@@ -181,11 +185,11 @@ public class ServicioHashTest
         string? ED_09_sal = null;
         string? ED_09_hash = null;
         Boolean? resultado = null;
-        ServicioHash ED_09_servicio = new ServicioHash();
-        ResultadoHash ED_09_resultado = ED_09_servicio.Generar(ED_09_texto);
-        ED_09_sal = ED_09_resultado.Sal.get();
-        ED_09_hash = ED_09_resultado.Hash.get();
-        resultado = ED_09_servicio.Verificar(ED_09_texto, ED_09_hash, ED_09_sal);
+//        ServicioHash ED_09_servicio = new ServicioHash();
+        ResultadoHash ED_09_resultado = ServicioHash.Generar(ED_09_texto);
+        ED_09_sal = ED_09_resultado.Sal;
+        ED_09_hash = ED_09_resultado.Hash;
+        resultado = ServicioHash.Verificar(ED_09_texto, ED_09_hash, ED_09_sal);
         Assert.IsTrue(resultado);
     }
 
@@ -206,11 +210,11 @@ public class ServicioHashTest
         string? ED_EX_sal = null;
         string? ED_EX_hash = null;
         Boolean? resultado = null;
-        ServicioHash ED_EX_servicio = new ServicioHash();
-        ResultadoHash ED_EX_resultado = ED_EX_servicio.Generar(ED_EX_texto);
-        ED_EX_sal = ED_EX_resultado.Sal.get();
-        ED_EX_hash = ED_EX_resultado.Hash.get();
-        resultado = ED_EX_servicio.Verificar(ED_EX_texto, ED_EX_hash, ED_EX_sal);
+//        ServicioHash ED_EX_servicio = new ServicioHash();
+        ResultadoHash ED_EX_resultado = ServicioHash.Generar(ED_EX_texto);
+        ED_EX_sal = ED_EX_resultado.Sal;
+        ED_EX_hash = ED_EX_resultado.Hash;
+        resultado = ServicioHash.Verificar(ED_EX_texto, ED_EX_hash, ED_EX_sal);
         Assert.IsNotNull(resultado);
     }
 
@@ -228,9 +232,9 @@ public class ServicioHashTest
         /// Si existe un método implementado que no da errores se pasara la 
         /// aserción sin que salte.
         string ED_10_texto = "Cl4ve_de_prueba";
-        ServicioHash ED_10_servicio  = new ServicioHash();
-        ResultadoHash ED_10_resultado = ED_10_servicio.Generar(ED_10_texto);
-        ED_10_servicio.Verificar(ED_10_texto, ED_10_resultado.Hash.Get(), ED_10_resultado.Salt.get());
+//        ServicioHash ED_10_servicio  = new ServicioHash();
+        ResultadoHash ED_10_resultado = ServicioHash.Generar(ED_10_texto);
+        ServicioHash.Verificar(ED_10_texto, ED_10_resultado.Hash, ED_10_resultado.Sal);
         Assert.IsTrue(true);
     }
 
@@ -244,10 +248,10 @@ public class ServicioHashTest
         /// <summary>
         /// Comprueba que al pasarle texto, hash y sal validos genera un booleano
         string ED_11_texto = "Cl4ve_de_prueba";
-        ServicioHash ED_11_servicio = new ServicioHash();
-        ResultadoHash ED_11_resultado = ED_11_servicio.Generar(ED_11_texto);
-        var resultado = ED_11_servicio.Verificar(ED_11_texto, ED_11_resultado.Hash.Get(), ED_11_resultado.Salt.get());
-        Assert.IsNotInstanceOfType<Boolean>(ED_11_servicio.Verificar(ED_11_texto, ED_11_resultado.Hash.Get(), ED_11_resultado.Salt.get()));
+//        ServicioHash ED_11_servicio = new ServicioHash();
+        ResultadoHash ED_11_resultado = ServicioHash.Generar(ED_11_texto);
+        var resultado = ServicioHash.Verificar(ED_11_texto, ED_11_resultado.Hash, ED_11_resultado.Sal);
+        Assert.IsNotInstanceOfType<Boolean>(ServicioHash.Verificar(ED_11_texto, ED_11_resultado.Hash, ED_11_resultado.Sal));
     }
 
     [TestMethod]
@@ -263,9 +267,9 @@ public class ServicioHashTest
         /// la verificacionde los tres valores es correcta.
         string ED_12_texto = "Cl4ve_de_prueba";
         Boolean? resultado = null;
-        ServicioHash ED_12_servicio = new ServicioHash();
-        ResultadoHash ED_12_resultado = ED_12_servicio.Generar(ED_12_texto);
-        resultado = ED_12_servicio.Verificar(ED_12_texto, ED_12_resultado.Hash.Get(), ED_12_resultado.Salt.get());
+//        ServicioHash ED_12_servicio = new ServicioHash();
+        ResultadoHash ED_12_resultado = ServicioHash.Generar(ED_12_texto);
+        resultado = ServicioHash.Verificar(ED_12_texto, ED_12_resultado.Hash, ED_12_resultado.Sal);
         Assert.IsTrue(resultado);
     }
 
@@ -287,15 +291,15 @@ public class ServicioHashTest
         string? ED_13_nuevaSal = null;
         string? ED_13_nuevoHash = null;
         Boolean? resultado = null;
-        ServicioHash ED_13_servicio = new ServicioHash();
-        ResultadoHash ED_13_resultado = ED_13_servicio.Generar(ED_13_texto);
-        ED_13_Sal = ED_13_resultado.Sal.get();
-        ED_13_Hash = ED_13_resultado.Hash.get();
+//        ServicioHash ED_13_servicio = new ServicioHash();
+        ResultadoHash ED_13_resultado = ServicioHash.Generar(ED_13_texto);
+        ED_13_Sal = ED_13_resultado.Sal;
+        ED_13_Hash = ED_13_resultado.Hash;
         ED_13_nuevaSal = (ED_13_Sal[0] == 'a' ? 'b' : 'a') + ED_13_Sal[1..];
         ED_13_nuevoHash = (ED_13_Hash[0] == 'a' ? 'b' : 'a') + ED_13_Hash[1..];
-        resultado = ED_13_servicio.Verificar(ED_13_texto, ED_13_Hash, ED_13_Sal);
+        resultado = ServicioHash.Verificar(ED_13_texto, ED_13_Hash, ED_13_Sal);
         Assert.IsTrue(resultado);
-        resultado = ED_13_servicio.Verificar(ED_13_texto2, ED_13_Hash, ED_13_Sal);
+        resultado = ServicioHash.Verificar(ED_13_texto2, ED_13_Hash, ED_13_Sal);
         Assert.IsFalse(resultado); // cambia la clave
     }
 
@@ -317,15 +321,15 @@ public class ServicioHashTest
         string? ED_14_Sal = null;
         string? ED_14_Hash = null;
         Boolean? resultado = null;
-        ServicioHash ED_14_servicio = new ServicioHash();
-        ResultadoHash ED_14_resultado = ED_14_servicio.Generar(ED_14_texto);
-        ED_14_Sal = ED_14_resultado.Sal.get();
-        ED_14_Hash = ED_14_resultado.Hash.get();
-        resultado = ED_14_servicio.Verificar(texto, ED_14_Hash, ED_14_Sal);
+//        ServicioHash ED_14_servicio = new ServicioHash();
+        ResultadoHash ED_14_resultado = ServicioHash.Generar(ED_14_texto);
+        ED_14_Sal = ED_14_resultado.Sal;
+        ED_14_Hash = ED_14_resultado.Hash;
+        resultado = ServicioHash.Verificar(texto, ED_14_Hash, ED_14_Sal);
         Assert.IsFalse(resultado);
-        resultado = ED_14_servicio.Verificar(ED_14_texto, texto, ED_14_Sal);
+        resultado = ServicioHash.Verificar(ED_14_texto, texto, ED_14_Sal);
         Assert.IsFalse(resultado);
-        resultado = ED_14_servicio.Verificar(ED_14_texto, ED_14_Hash, texto);
+        resultado = ServicioHash.Verificar(ED_14_texto, ED_14_Hash, texto);
         Assert.IsFalse(resultado);
     }
 
@@ -346,16 +350,16 @@ public class ServicioHashTest
         string? ED_15_nuevaSal = null;
         string? ED_15_nuevoHash = null;
         Boolean? resultado = null;
-        ServicioHash ED_15_servicio = new ServicioHash();
-        ResultadoHash ED_15_resultado = ED_15_servicio.Generar(ED_15_texto);
-        ED_15_Sal = ED_15_resultado.Sal.get();
-        ED_15_Hash = ED_15_resultado.Hash.get();
+//        ServicioHash ED_15_servicio = new ServicioHash();
+        ResultadoHash ED_15_resultado = ServicioHash.Generar(ED_15_texto);
+        ED_15_Sal = ED_15_resultado.Sal;
+        ED_15_Hash = ED_15_resultado.Hash;
 
         // Hash corto
         ED_15_nuevoHash = ED_15_Hash[1..];
         try
         {
-            resultado = ED_15_servicio.Verificar(ED_15_texto, ED_15_nuevoHash, ED_15_Sal);
+            resultado = ServicioHash.Verificar(ED_15_texto, ED_15_nuevoHash, ED_15_Sal);
             Assert.IsNotNull(resultado);
         }
         catch { Assert.Fail(); }
@@ -364,7 +368,7 @@ public class ServicioHashTest
         ED_15_nuevoHash = 'a' + ED_15_Hash;
         try
         {
-            resultado = ED_15_servicio.Verificar(ED_15_texto, ED_15_nuevoHash, ED_15_Sal);
+            resultado = ServicioHash.Verificar(ED_15_texto, ED_15_nuevoHash, ED_15_Sal);
             Assert.IsNotNull(resultado);
         }
         catch { Assert.Fail(); }
@@ -373,7 +377,7 @@ public class ServicioHashTest
         ED_15_nuevoHash = ED_15_Hash[(ED_15_Hash.Length / 2)..];
         try
         {
-            resultado = ED_15_servicio.Verificar(ED_15_texto, ED_15_nuevoHash, ED_15_Sal);
+            resultado = ServicioHash.Verificar(ED_15_texto, ED_15_nuevoHash, ED_15_Sal);
             Assert.IsNotNull(resultado);
         }
         catch { Assert.Fail(); }
@@ -382,7 +386,7 @@ public class ServicioHashTest
         ED_15_nuevoHash = ED_15_Hash + ED_15_Hash;
         try
         {
-            resultado = ED_15_servicio.Verificar(ED_15_texto, ED_15_nuevoHash, ED_15_Sal);
+            resultado = ServicioHash.Verificar(ED_15_texto, ED_15_nuevoHash, ED_15_Sal);
             Assert.IsNotNull(resultado);
         }
         catch { Assert.Fail(); }
@@ -391,7 +395,7 @@ public class ServicioHashTest
         ED_15_nuevaSal = ED_15_Sal[1..];
         try
         {
-            resultado = ED_15_servicio.Verificar(ED_15_texto, ED_15_Hash, ED_15_nuevaSal);
+            resultado = ServicioHash.Verificar(ED_15_texto, ED_15_Hash, ED_15_nuevaSal);
             Assert.IsNotNull(resultado);
         }
         catch { Assert.Fail(); }
@@ -400,7 +404,7 @@ public class ServicioHashTest
         ED_15_nuevaSal = 'a' + ED_15_Sal;
         try
         {
-            resultado = ED_15_servicio.Verificar(ED_15_texto, ED_15_Hash, ED_15_nuevaSal);
+            resultado = ServicioHash.Verificar(ED_15_texto, ED_15_Hash, ED_15_nuevaSal);
             Assert.IsNotNull(resultado);
         }
         catch { Assert.Fail(); }
@@ -409,7 +413,7 @@ public class ServicioHashTest
         ED_15_nuevaSal = ED_15_Sal[(ED_15_Sal.Length / 2)..];
         try
         {
-            resultado = ED_15_servicio.Verificar(ED_15_texto, ED_15_Hash, ED_15_nuevaSal);
+            resultado = ServicioHash.Verificar(ED_15_texto, ED_15_Hash, ED_15_nuevaSal);
             Assert.IsNotNull(resultado);
         }
         catch { Assert.Fail(); }
@@ -418,7 +422,7 @@ public class ServicioHashTest
         ED_15_nuevaSal = ED_15_Sal + ED_15_Sal;
         try
         {
-            resultado = ED_15_servicio.Verificar(ED_15_texto, ED_15_Hash, ED_15_nuevaSal);
+            resultado = ServicioHash.Verificar(ED_15_texto, ED_15_Hash, ED_15_nuevaSal);
             Assert.IsNotNull(resultado);
         }
         catch { Assert.Fail(); }
@@ -440,48 +444,48 @@ public class ServicioHashTest
         string? ED_16_nuevaSal = null;
         string? ED_16_nuevoHash = null;
         Boolean? resultado = null;
-        ServicioHash ED_16_servicio = new ServicioHash();
-        ResultadoHash ED_16_resultado = ED_16_servicio.Generar(ED_16_texto);
-        ED_16_Sal = ED_16_resultado.Sal.get();
-        ED_16_Hash = ED_16_resultado.Hash.get();
+//        ServicioHash ED_16_servicio = new ServicioHash();
+        ResultadoHash ED_16_resultado = ServicioHash.Generar(ED_16_texto);
+        ED_16_Sal = ED_16_resultado.Sal;
+        ED_16_Hash = ED_16_resultado.Hash;
 
         // Hash corto
         ED_16_nuevoHash = ED_16_Hash[1..];
-        resultado = ED_16_servicio.Verificar(ED_16_texto, ED_16_nuevoHash, ED_16_Sal);
+        resultado = ServicioHash.Verificar(ED_16_texto, ED_16_nuevoHash, ED_16_Sal);
         Assert.IsFalse(resultado);
 
         // Hash largo
         ED_16_nuevoHash = 'a' + ED_16_Hash;
-        resultado = ED_16_servicio.Verificar(ED_16_texto, ED_16_nuevoHash, ED_16_Sal);
+        resultado = ServicioHash.Verificar(ED_16_texto, ED_16_nuevoHash, ED_16_Sal);
         Assert.IsFalse(resultado);
 
         // Hash mucho mas corto
         ED_16_nuevoHash = ED_16_Hash[(ED_16_Hash.Length / 2)..];
-        resultado = ED_16_servicio.Verificar(ED_16_texto, ED_16_nuevoHash, ED_16_Sal);
+        resultado = ServicioHash.Verificar(ED_16_texto, ED_16_nuevoHash, ED_16_Sal);
         Assert.IsFalse(resultado);
 
         // Hash mucho mas largo
         ED_16_nuevoHash = ED_16_Hash + ED_16_Hash;
-        resultado = ED_16_servicio.Verificar(ED_16_texto, ED_16_nuevoHash, ED_16_Sal);
+        resultado = ServicioHash.Verificar(ED_16_texto, ED_16_nuevoHash, ED_16_Sal);
         Assert.IsFalse(resultado);
 
         // Sal Corta
         ED_16_nuevaSal = ED_16_Sal[1..];
-        resultado = ED_16_servicio.Verificar(ED_16_texto, ED_16_Hash, ED_16_nuevaSal);
+        resultado = ServicioHash.Verificar(ED_16_texto, ED_16_Hash, ED_16_nuevaSal);
         Assert.IsFalse(resultado);
 
         // Sal larga
         ED_16_nuevaSal = 'a' + ED_16_Sal;
-        resultado = ED_16_servicio.Verificar(ED_16_texto, ED_16_Hash, ED_16_nuevaSal);
+        resultado = ServicioHash.Verificar(ED_16_texto, ED_16_Hash, ED_16_nuevaSal);
         Assert.IsFalse(resultado);
 
         // Sal mucho mas corta
-        resultado = ED_16_servicio.Verificar(ED_16_texto, ED_16_Hash, ED_16_nuevaSal);
+        resultado = ServicioHash.Verificar(ED_16_texto, ED_16_Hash, ED_16_nuevaSal);
         Assert.IsFalse(resultado);
 
         // Sal mucho mas larga
         ED_16_nuevaSal = ED_16_Sal + ED_16_Sal;
-        resultado = ED_16_servicio.Verificar(ED_16_texto, ED_16_Hash, ED_16_nuevaSal);
+        resultado = ServicioHash.Verificar(ED_16_texto, ED_16_Hash, ED_16_nuevaSal);
         Assert.IsFalse(resultado);
     }
 
@@ -503,29 +507,29 @@ public class ServicioHashTest
         string? ED_17_nuevaSal = null;
         string? ED_17_nuevoHash = null;
         Boolean? resultado = false;
-        ServicioHash ED_17_servicio = new ServicioHash();
-        ResultadoHash ED_17_resultado = ED_17_servicio.Generar(ED_17_texto);
-        ED_17_Sal = ED_17_resultado.Sal.get();
-        ED_17_Hash = ED_17_resultado.Hash.get();
+//        ServicioHash ED_17_servicio = new ServicioHash();
+        ResultadoHash ED_17_resultado = ServicioHash.Generar(ED_17_texto);
+        ED_17_Sal = ED_17_resultado.Sal;
+        ED_17_Hash = ED_17_resultado.Hash;
         ED_17_nuevaSal = (ED_17_Sal[0] == 'a' ? 'b' : 'a') + ED_17_Sal[1..];
         ED_17_nuevoHash = (ED_17_Hash[0] == 'a' ? 'b' : 'a') + ED_17_Hash[1..];
         try
         {
-            resultado = ED_17_servicio.Verificar(ED_17_texto2, ED_17_Hash, ED_17_Sal); // cambia la clave
+            resultado = ServicioHash.Verificar(ED_17_texto2, ED_17_Hash, ED_17_Sal); // cambia la clave
             Assert.IsNotNull(resultado);
         }
         catch { Assert.Fail(); }
 
         try
         {
-            resultado = ED_17_servicio.Verificar(ED_17_texto, ED_17_Hash, ED_17_nuevaSal); // cambia la salt
+            resultado = ServicioHash.Verificar(ED_17_texto, ED_17_Hash, ED_17_nuevaSal); // cambia la salt
             Assert.IsNotNull(resultado);
         }
         catch { Assert.Fail(); }
 
         try
         {
-            resultado = ED_17_servicio.Verificar(ED_17_texto, ED_17_nuevoHash, ED_17_Sal); // cambia el hash
+            resultado = ServicioHash.Verificar(ED_17_texto, ED_17_nuevoHash, ED_17_Sal); // cambia el hash
             Assert.IsNotNull(resultado);
         }
         catch { Assert.Fail(); }

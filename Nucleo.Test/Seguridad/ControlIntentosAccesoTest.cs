@@ -1,5 +1,7 @@
 ﻿// Permite usar los atributos de pruebas y las comprobaciones Assert
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Diagnostics.CodeAnalysis;
+
 
 // Permite acceder a la clase ControlIntentosAcceso
 using TPMP_bpg_eca.Nucleo.Seguridad;
@@ -9,6 +11,7 @@ namespace TPMP_bpg_eca.Nucleo.Test;
 
 // Indica a MSTest que esta clase contiene pruebas
 [TestClass]
+[ExcludeFromCodeCoverage]
 public class ControlIntentosAccesoTest
 {
     // Guarda una fecha fija como punto de partida de las pruebas
