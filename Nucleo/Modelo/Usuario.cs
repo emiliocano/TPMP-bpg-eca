@@ -44,7 +44,13 @@ namespace TPMP_bpg_eca.Nucleo.Modelo
         /// Obtiene o establece el identificador único del usuario.
         /// </summary>
         /// <value>El número entero que representa el ID del usuario en el sistema.</value>
-        public int Id { get { return this._id; } set { this._id = value; } }
+        public int IdUsuario { get { return this._id; } set { this._id = value; } }
+
+        /// <summary>
+        /// Obtiene o establece el identificador único del usuario.
+        /// </summary>
+        /// <value>El número entero que representa el ID del usuario en el sistema.</value>
+        public string EMail { get { return this._eMail; } set { this._eMail = value; } }
 
         /// <summary>
         /// Genera una sal criptográfica aleatoria.
@@ -65,29 +71,12 @@ namespace TPMP_bpg_eca.Nucleo.Modelo
         {
             return "";
         }
-    }
 
-    /// <summary>
-    /// Representa el rol del usuario en la aplicación.
-    /// </summary>
-    public class Rol
-    {
-        private string _nombre;
 
-        /// <summary>
-        /// Inicializa una nueva instancia de la clase <see cref="Rol"/> especificando su nombre.
-        /// </summary>
-        /// <param name="nombre">El nombre identificativo del rol (ej. "Administrador", "Usuario").</param>
-        public Rol(string nombre)
+        public bool CompruebaPassword(string Contraseña)
         {
-            _nombre = nombre;
+            return true;
         }
-
-        /// <summary>
-        /// Obtiene o establece el nombre del rol.
-        /// </summary>
-        /// <value>Cadena de texto con el nombre descriptivo del rol.</value>
-        public string Nombre { get { return this._nombre; } set { this._nombre = value; } }
     }
 
     /// <summary>

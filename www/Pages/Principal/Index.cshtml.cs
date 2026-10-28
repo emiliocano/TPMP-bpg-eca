@@ -1,7 +1,7 @@
 using BackEnd;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Nucleo.Modelos;
+using TPMP_bpg_eca.Nucleo.Modelo;
 using www.Utilidades;
 
 namespace www.Pages.Principal;
