@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+// Permite usar el servicio que genera y verifica las contraseñas
+using TPMP_bpg_eca.Nucleo.Seguridad;
 
 namespace TPMP_bpg_eca.Nucleo.Modelo
 {
@@ -33,11 +35,23 @@ namespace TPMP_bpg_eca.Nucleo.Modelo
         /// <param name="clave">Contraseña en texto plano que será procesada con sal y hash.</param>
         public Usuario(int id, string cuenta, string eMail, string clave)
         {
+            // Guarda el identificador del usuario
             _id = id;
+
+            // Guarda el nombre de la cuenta
             _usuario = cuenta;
+
+            // Guarda el correo electrónico
             _eMail = eMail;
-            _salClave = generadorSalClave();
-            _hashClave = generadorHashClave(clave, _salClave);
+
+            // Genera el hash y su sal a partir de la contraseña
+            ResultadoHash resultado = ServicioHash.Generar(clave);
+
+            // Guarda la sal utilizada para generar este hash
+            _salClave = resultado.Sal;
+
+            // Guarda el hash para comprobar la contraseña más adelante
+            _hashClave = resultado.Hash;
         }
 
         /// <summary>
@@ -75,7 +89,8 @@ namespace TPMP_bpg_eca.Nucleo.Modelo
 
         public bool CompruebaPassword(string Contraseña)
         {
-            return true;
+            // Verifica la contraseña usando el hash y la sal guardados
+            return ServicioHash.Verificar(Contraseña, _hashClave, _salClave);
         }
     }
 
