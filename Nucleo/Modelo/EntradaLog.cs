@@ -1,14 +1,40 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace TPMP_bpg_eca.Nucleo.Modelo
 {
+    // Guarda la información de un suceso de la aplicación
     public class EntradaLog
     {
-        public EntradaLog(DateTime fechaEntrada, string texto1, string text2, string usuarrio)
+        // Fecha y hora en las que ocurrió
+        public DateTime FechaHora { get; set; }
+
+        // Tipo de entrada, por ejemplo información o error
+        public string Nivel { get; set; }
+
+        // Explicación de lo que ha ocurrido
+        public string Mensaje { get; set; }
+
+        // Usuario relacionado con el suceso
+        public string NombreUsuario { get; set; }
+
+        // Crea la entrada con los datos recibidos
+        public EntradaLog(
+            DateTime fechaEntrada,
+            string nivel,
+            string mensaje,
+            string usuario)
         {
-            // generar el metodo y poner nombres adecuados a las variables
+            // Guarda la fecha recibida
+            FechaHora = fechaEntrada;
+
+            // Guarda el nivel del suceso
+            Nivel = nivel;
+
+            // Guarda el mensaje
+            Mensaje = mensaje;
+
+            // Guarda el nombre del usuario
+            NombreUsuario = usuario;
         }
     }
 }
