@@ -9,6 +9,7 @@ namespace TPMP_bpg_eca.Nucleo.Modelo
     /// </summary>
     public class Rol
     {
+        private int _id;
         private string _nombre;
 
         /// <summary>
@@ -19,6 +20,12 @@ namespace TPMP_bpg_eca.Nucleo.Modelo
         {
             _nombre = nombre;
         }
+
+        /// <summary>
+        /// Obtiene o establece el identificador único del rol.
+        /// </summary>
+        /// <value>El número entero que representa el ID del rol en el sistema.</value>
+        public int IdRol { get { return this._id; } set { this._id = value; } }
 
         /// <summary>
         /// Obtiene o establece el nombre del rol.
