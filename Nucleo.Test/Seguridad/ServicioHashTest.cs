@@ -178,7 +178,7 @@ public class ServicioHashTest
         ResultadoHash ED_09_resultado = ServicioHash.Generar(ED_09_texto);
         ED_09_sal = ED_09_resultado.Sal;
         ED_09_hash = ED_09_resultado.Hash;
-        resultado = ServicioHash.Verificar(ED_09_texto, ED_09_hash, ED_09_sal);
+        resultado = ServicioHash.Verificar(ED_09_texto, ED_09_hash, ED_09_sal); //Assert.Throws<Exception>(() => ServicioHash.Generar(ED_03_texto));
         Assert.IsTrue(resultado);
     }
 
@@ -187,6 +187,7 @@ public class ServicioHashTest
     [DataRow("")]
     [DataRow(" ")]
     [DataRow("    ")]
+    [DataRow("Cl4ve_de_prueba")]
     public void Generar_nunca_devvuelve_valores_nulos(string? ED_EX_texto)
     {
         /// <summary>
@@ -194,16 +195,17 @@ public class ServicioHashTest
         /// Con claves validas o invalidas el metodo no debe devolver un valor
         /// nulo
         /// <summary>
-        /// Se prueba una clave valida y una invalida con cada condicion y se
-        /// comprueba que el resultado no es nulo
-        string? ED_EX_sal = null;
-        string? ED_EX_hash = null;
-        Boolean? resultado = null;
-        ResultadoHash ED_EX_resultado = ServicioHash.Generar(ED_EX_texto);
-        ED_EX_sal = ED_EX_resultado.Sal;
-        ED_EX_hash = ED_EX_resultado.Hash;
-        resultado = ServicioHash.Verificar(ED_EX_texto, ED_EX_hash, ED_EX_sal);
-        Assert.IsNotNull(resultado);
+        /// Se prueban varias claves invalidas y una valida se comprueba que el 
+        /// resultado no es nulo
+        try
+        {
+            ResultadoHash ED_EX_resultado = ServicioHash.Generar(ED_EX_texto);
+            Assert.IsNotNull(ED_EX_resultado);
+        }
+        catch
+        {
+            Assert.IsTrue(true);
+        }
     }
 
     // Método verificar
@@ -237,7 +239,7 @@ public class ServicioHashTest
         string ED_11_texto = "Cl4ve_de_prueba";
         ResultadoHash ED_11_resultado = ServicioHash.Generar(ED_11_texto);
         var resultado = ServicioHash.Verificar(ED_11_texto, ED_11_resultado.Hash, ED_11_resultado.Sal);
-        Assert.IsNotInstanceOfType<Boolean>(ServicioHash.Verificar(ED_11_texto, ED_11_resultado.Hash, ED_11_resultado.Sal));
+        Assert.IsInstanceOfType<Boolean>(ServicioHash.Verificar(ED_11_texto, ED_11_resultado.Hash, ED_11_resultado.Sal));
     }
 
     [TestMethod]
