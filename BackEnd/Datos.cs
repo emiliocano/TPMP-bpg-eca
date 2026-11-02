@@ -23,17 +23,29 @@ namespace BackEnd
             Roles = new Dictionary<int, Rol>();
             Logs = new List<EntradaLog>();
 // TODO: llamar a reiniciar para poner los contadores a cero y crear ususarios, roles y proyectos iniciales para probar
-//            Reiniciar();
+           Reiniciar();
         }
 
         #region Usuarios
-// TODO: añadir metodo para inicializar usuarios iniciales?
+        // TODO: añadir metodo para inicializar usuarios iniciales?
+        private void InicializarUsuarios()
+        {
+            // constructor recibe: ID, cuenta, correo y contraseña
+            // El -1 indica que GuardarUsuario debe asignarle un ID
+            Usuario admin = new Usuario(
+                -1,
+                "admin",
+                "uadmin@ubu.es",
+                "DemoLocal26!");
+
+            GuardarUsuario(admin);
+        }
         public Usuario? GuardarUsuario(Usuario usuario)
         {
             ArgumentNullException.ThrowIfNull(usuario);
 
             // TODO: mirar como tiene que ser la comparación. Que id tiene un usuario nuevo
-            if (usuario.IdUsuario < 1)
+            if (usuario.IdUsuario < 0)
             {
                 usuario.IdUsuario = SiguienteIdUsuario++;
                 Usuarios.Add(usuario.IdUsuario, usuario);
@@ -58,12 +70,16 @@ namespace BackEnd
 
         public Usuario? LeerUsuario(int idUsuario)
         {
-            throw new NotImplementedException();
+            // La página principal recupera al usuario usando el ID guardado en sesión
+            return Usuarios.GetValueOrDefault(idUsuario);
         }
 
         public Usuario? LeerUsuario(string eMail)
         {
-            throw new NotImplementedException();
+            // La pantalla de contraseña busca al usuario por su correo
+            // Si no hay coincidencia, FirstOrDefault devuelve null
+            return Usuarios.Values.FirstOrDefault(usuario =>
+                string.Equals(usuario.EMail, eMail, StringComparison.OrdinalIgnoreCase));
         }
 
         public Usuario? EliminarUsuario(int idUsuario)
@@ -73,10 +89,19 @@ namespace BackEnd
         #endregion Usuarios
 
         #region Roles
-// TODO: añadir metodo para inicializar roles iniciales?
+        // TODO: añadir metodo para inicializar roles iniciales?
+        private void InicializarRoles()
+        {
+            // Un ID negativo indica a GuardarRol que este rol es nuevo
+            Rol administrador = new Rol("Administrador") { IdRol = -1 };
+
+            GuardarRol(administrador);
+        }
         public void AgregarLog(EntradaLog log)
         {
-            throw new NotImplementedException();
+            // Guarda el suceso que recibe desde la aplicación
+            ArgumentNullException.ThrowIfNull(log);
+            Logs.Add(log);
         }
 
         public Rol? GuardarRol(Rol rol)
@@ -112,7 +137,19 @@ namespace BackEnd
         #endregion Roles
 
         #region Proyecto
-// TODO: añadir metodo para inicializar proyectos iniciales?
+        // TODO: añadir metodo para inicializar proyectos iniciales?
+        private void InicializarProyectos()
+        {
+            // Crea el proyecto de ejemplo
+            Proyecto proyecto = new Proyecto
+            {
+                Nombre = "Proyecto de ejemplo",
+                Siglas = "PROY001",
+                Descripcion = "Proyecto generado automáticamente"
+            };
+
+            GuardarProyecto(proyecto);
+        }
         public Proyecto? EliminarProyecto(int idProyecto)
         {
             throw new NotImplementedException();
@@ -120,7 +157,27 @@ namespace BackEnd
 
         public Proyecto? GuardarProyecto(Proyecto proyecto)
         {
-            throw new NotImplementedException();
+            // Comprueba que hemos recibido un proyecto
+            ArgumentNullException.ThrowIfNull(proyecto);
+
+            if (proyecto.IdProyecto < 0)
+            {
+                // Proyecto.cs ya utiliza -1 para un proyecto nuevo
+                proyecto.IdProyecto = SiguienteIdProyecto++;
+                Proyectos.Add(proyecto.IdProyecto, proyecto);
+            }
+            else if (Proyectos.ContainsKey(proyecto.IdProyecto))
+            {
+                // Si el ID ya existe, actualiza ese proyecto
+                Proyectos[proyecto.IdProyecto] = proyecto;
+            }
+            else
+            {
+                throw new KeyNotFoundException(
+                    $"No se encontró el proyecto con Id {proyecto.IdProyecto}");
+            }
+
+            return proyecto;
         }
 
         public Proyecto? LeerProyecto(int idProyecto)
@@ -136,7 +193,21 @@ namespace BackEnd
 // TODO: Poner los contadores a cero y crear ususarios, roles y proyectos iniciales para probar
         public void Reiniciar()
         {
-            throw new NotImplementedException();
+            // Vacía los datos que hubiera de una ejecución anterior del reinicio
+            Usuarios.Clear();
+            Roles.Clear();
+            Proyectos.Clear();
+            Logs.Clear();
+
+            // El primer elemento de cada tipo recibirá el identificador 1
+            SiguienteIdUsuario = 1;
+            SiguienteIdRol = 1;
+            SiguienteIdProyecto = 1;
+
+            // Carga los datos de ejemplo
+            InicializarRoles();
+            InicializarUsuarios();
+            InicializarProyectos();
         }
     }
 }
