@@ -28,6 +28,17 @@
             <span asp-validation-for="Contraseña"
                   class="error"></span>
 
+                  @* Muestra la cuenta atrás solo cuando hay un bloqueo activo. *@
+                    @if (Model.SegundosRestantes > 0)
+                    {
+                         <p id="avisoBloqueo" class="error">
+                         Podrás volver a intentarlo en
+                        <strong id="cuentaAtras" role="timer" data-segundos="@Model.SegundosRestantes">
+                         @($"{Model.SegundosRestantes / 60:00}:{Model.SegundosRestantes % 60:00}")
+                    </strong>
+                      </p>
+                    }
+
             <div class="botones">
 
                 <button type="submit"
@@ -40,7 +51,8 @@
                 <button type="submit"
                         id="btnAceptar"
                         class="boton-aceptar"
-                        asp-page-handler="Aceptar">
+                        asp-page-handler="Aceptar"
+                        disabled="@(Model.SegundosRestantes > 0)">
                     Validar
                 </button>
             </div>
@@ -48,3 +60,55 @@
         <p class="pie">Test Project Management Platform</p>
     </div>
 </div>
+<script>
+    (() => {
+        // Busca el contador que aparece cuando la cuenta está bloqueada.
+        const contador = document.getElementById("cuentaAtras");
+
+        // Si no hay bloqueo, no necesitamos poner en marcha el reloj.
+        if (!contador) {
+            return;
+        }
+
+        // Lee los segundos que ha calculado el servidor.
+        const segundosIniciales = Number(contador.dataset.segundos);
+
+        // Calcula cuándo debe terminar la cuenta atrás en esta pantalla.
+        const fin = Date.now() + segundosIniciales * 1000;
+
+        function actualizarContador() {
+            // Calcula lo que queda según el tiempo transcurrido.
+            // Así no depende de que el navegador ejecute cada llamada puntual.
+            const restantes = Math.max(
+                0,
+                Math.ceil((fin - Date.now()) / 1000)
+            );
+
+            // Separa el tiempo en minutos y segundos.
+            const minutos = Math.floor(restantes / 60);
+            const segundos = restantes % 60;
+
+            // Escribe siempre dos cifras: por ejemplo, 04:09.
+            contador.textContent =
+                String(minutos).padStart(2, "0") + ":" +
+                String(segundos).padStart(2, "0");
+
+            if (restantes === 0) {
+                // Detiene las actualizaciones del contador.
+                clearInterval(intervalo);
+
+                // Abre la página mediante GET para consultar otra vez el bloqueo.
+                // No reenvía la contraseña del formulario anterior.
+                window.location.replace(
+                    "@Url.Page("/Login/Index2")"
+                );
+            }
+        }
+
+        // Actualiza el reloj una vez por segundo.
+        const intervalo = setInterval(actualizarContador, 1000);
+
+        // Muestra el tiempo inmediatamente, sin esperar al primer segundo.
+        actualizarContador();
+    })();
+</script>

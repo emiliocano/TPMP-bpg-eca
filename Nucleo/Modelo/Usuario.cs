@@ -26,6 +26,10 @@ namespace TPMP_bpg_eca.Nucleo.Modelo
         private string   _hashClave;
         private string   _salClave;
 
+        // Guarda los fallos y el tiempo de bloqueo de este usuario
+        public ControlIntentosAcceso ControlAcceso { get; } =
+            new ControlIntentosAcceso();
+
         /// <summary>
         /// Inicializa una nueva instancia de la clase <see cref="Usuario"/> con sus credenciales básicas.
         /// </summary>
