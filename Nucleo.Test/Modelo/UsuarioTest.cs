@@ -84,4 +84,26 @@ public class UsuarioTest
         // Comprueba que el intento anterior no ha alterado sus credenciales
         Assert.IsTrue(usuario.CompruebaPassword("ClaveSegur1!"));
     }
+
+    [TestMethod]
+    public void CambiarCorreo_ConservaElIdAsignado()
+    {
+        // Creamos un usuario nuevo, todavía sin un ID definitivo
+        var usuario = new Usuario(-1, "borja", "inicial@example.com", "ClaveSegur1!");
+
+        // Comprobamos los datos con los que se ha creado
+        Assert.AreEqual(-1, usuario.IdUsuario);
+        Assert.AreEqual("inicial@example.com", usuario.EMail);
+
+        // Le asignamos un ID, como hace la aplicación al guardarlo
+        usuario.IdUsuario = 7;
+
+        // Más adelante, el usuario cambia su dirección de correo
+        usuario.EMail = "nuevo@example.com";
+
+        // Debe tener el correo nuevo y conservar el ID que se le asignó
+        Assert.AreEqual("nuevo@example.com", usuario.EMail);
+        Assert.AreEqual(7, usuario.IdUsuario);
+    }
+
 }
