@@ -12,9 +12,7 @@ public static class ServicioHash
     {
         if (string.IsNullOrWhiteSpace(texto))
         {
-            throw new ArgumentException(
-                "El texto no puede estar vacío.",
-                nameof(texto));
+            throw new InvalidOperationException("El texto no puede estar vacío.");
         }
 
         byte[] sal = RandomNumberGenerator.GetBytes(TamanoSal);
