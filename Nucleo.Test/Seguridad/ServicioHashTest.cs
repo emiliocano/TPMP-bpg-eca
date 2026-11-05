@@ -516,4 +516,52 @@ public class ServicioHashTest
         }
         catch { Assert.Fail(); }
     }
+
+    [TestMethod]
+    [DataRow("ClaveDePrueba1!", true)]   // Es la contraseña original
+    [DataRow("OtraClave2!", false)]      // Es una contraseña distinta
+    public void VerificarConResultadoHash_SoloAceptaLaClaveOriginal(
+    string claveIntroducida, bool esperado)
+    {
+        // Generamos el hash y la sal de la contraseña original
+        var guardado = ServicioHash.Generar("ClaveDePrueba1!");
+
+        // Pasamos el objeto completo para probar la versión que estaba al 0 %
+        bool obtenido = ServicioHash.Verificar(claveIntroducida, guardado);
+
+        // Solo la contraseña original debe coincidir
+        Assert.AreEqual(esperado, obtenido);
+    }
+
+    [TestMethod]
+    public void VerificarConResultadoHash_RechazaUnaSalMalFormada()
+    {
+        // Partimos de un resultado válido para conservar un hash correcto
+        var valido = ServicioHash.Generar("ClaveDePrueba1!");
+
+        // Cambiamos solo la sal por un texto que no se puede leer como Base64
+        var dañado = new ResultadoHash
+        {
+            Hash = valido.Hash,
+            Sal = "no-es-base64!"
+        };
+
+        // Si la sal guardada está dañada, debe devolver false sin lanzar una excepción
+        Assert.IsFalse(ServicioHash.Verificar("ClaveDePrueba1!", dañado));
+    }
+
+    [TestMethod]
+    [DataRow("", "AQID", "BAUG")]      // Falta la contraseña
+    [DataRow("Clave1!", "", "BAUG")]   // Falta el hash
+    [DataRow("Clave1!", "AQID", "")]   // Falta la sal
+    public void VerificarConResultadoHash_RechazaDatosIncompletos(
+    string texto, string hash, string sal)
+    {
+        // Preparamos el resultado guardado con los datos de esta fila
+        var guardado = new ResultadoHash { Hash = hash, Sal = sal };
+
+        // Si falta alguno de los tres datos, no se debe aceptar la contraseña
+        Assert.IsFalse(ServicioHash.Verificar(texto, guardado));
+    }
+
 }
