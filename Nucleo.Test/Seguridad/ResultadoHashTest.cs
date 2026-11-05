@@ -79,4 +79,32 @@ public class ResultadoHashTest
         Assert.IsTrue(original != otro);
     }
 
+    [TestMethod]
+    public void Equals_ComoObjeto_ComparaHashYSal()
+    {
+        var resultado = new ResultadoHash { Hash = "hash-A", Sal = "sal-A" };
+        object otroIgual = new ResultadoHash { Hash = "hash-A", Sal = "sal-A" };
+
+        // Al declarar otroIgual como object, se prueba Equals(object)
+        Assert.IsTrue(resultado.Equals(otroIgual));
+
+        // Una cadena no es un ResultadoHash, aunque contenga el mismo hash
+        Assert.IsFalse(resultado.Equals("hash-A"));
+    }
+
+    [TestMethod]
+    public void Igualdad_ConResultadosNulos_ComparaAmbosLados()
+    {
+        ResultadoHash? ausente = null;
+        ResultadoHash? otroAusente = null;
+        var presente = new ResultadoHash { Hash = "hash-A", Sal = "sal-A" };
+
+        // Dos referencias nulas son iguales
+        Assert.IsTrue(ausente == otroAusente);
+
+        // Si solo una es nula, el orden de la comparación no cambia el resultado
+        Assert.IsFalse(ausente == presente);
+        Assert.IsFalse(presente == ausente);
+    }
+
 }
