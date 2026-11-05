@@ -49,4 +49,34 @@ public class ResultadoHashTest
         Assert.IsFalse(string.IsNullOrEmpty(resultado.Sal));
 
     }
+
+    [TestMethod]
+    public void MismoHashYMismaSal_DanResultadosIguales()
+    {
+        // Creamos dos objetos distintos que contienen los mismos datos
+        var primero = new ResultadoHash { Hash = "hash-A", Sal = "sal-1" };
+        var segundo = new ResultadoHash { Hash = "hash-A", Sal = "sal-1" };
+
+        // Aunque sean objetos distintos, deben considerarse iguales
+        Assert.IsTrue(primero == segundo);
+
+        // Dos objetos iguales deben devolver el mismo código para su uso en colecciones
+        Assert.AreEqual(primero.GetHashCode(), segundo.GetHashCode());
+    }
+
+    [TestMethod]
+    [DataRow("hash-B", "sal-1")] // Cambia solo el hash
+    [DataRow("hash-A", "sal-2")] // Cambia solo la sal
+    public void CambiarHashOSal_DaResultadosDistintos(string hash, string sal)
+    {
+        // Este es el resultado que usamos como referencia en los dos casos
+        var original = new ResultadoHash { Hash = "hash-A", Sal = "sal-1" };
+
+        // Creamos otro resultado cambiando un solo dato cada vez
+        var otro = new ResultadoHash { Hash = hash, Sal = sal };
+
+        // Basta con que cambie uno de los dos datos para que sean distintos
+        Assert.IsTrue(original != otro);
+    }
+
 }
