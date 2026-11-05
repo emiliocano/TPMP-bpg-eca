@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 // Permite utilizar la clase Usuario
 using TPMP_bpg_eca.Nucleo.Modelo;
+using TPMP_bpg_eca.Nucleo.Seguridad;
 
 namespace TPMP_bpg_eca.Nucleo.Test;
 
@@ -105,5 +106,22 @@ public class UsuarioTest
         Assert.AreEqual("nuevo@example.com", usuario.EMail);
         Assert.AreEqual(7, usuario.IdUsuario);
     }
+
+    [TestMethod]
+    public void GeneradoresDeClave_CreanUnaSalNuevaYUnHashVerificable()
+    {
+        var usuario = new Usuario(1, "borja", "borja@example.com", "ClaveSegur1!");
+
+        // Cada llamada debe generar una sal nueva
+        string sal = usuario.generadorSalClave();
+        string otraSal = usuario.generadorSalClave();
+        Assert.AreNotEqual(sal, otraSal, "Las dos sales deben ser distintas.");
+
+        // El hash debe corresponder a esta contraseña y a la sal que le pasamos
+        string hash = usuario.generadorHashClave("ClaveSegur1!", sal);
+        Assert.IsTrue(ServicioHash.Verificar("ClaveSegur1!", hash, sal));
+        Assert.IsFalse(ServicioHash.Verificar("OtraClave12!", hash, sal));
+    }
+
 
 }

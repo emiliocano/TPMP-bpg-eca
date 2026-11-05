@@ -8,6 +8,12 @@ public static class ServicioHash
     private const int TamanoHash = 32;
     private const int NumeroIteraciones = 100_000;
 
+    // Permite que Usuario y Generar creen la sal de la misma forma
+    internal static byte[] CrearSal()
+    {
+        return RandomNumberGenerator.GetBytes(TamanoSal);
+    }
+
     public static ResultadoHash Generar(string texto)
     {
         if (string.IsNullOrWhiteSpace(texto))
@@ -15,7 +21,7 @@ public static class ServicioHash
             throw new InvalidOperationException("El texto no puede estar vacío.");
         }
 
-        byte[] sal = RandomNumberGenerator.GetBytes(TamanoSal);
+        byte[] sal = CrearSal();
         byte[] hash = Calcular(texto, sal);
 
         return new ResultadoHash
@@ -88,7 +94,7 @@ public static class ServicioHash
         }
     }
 
-    private static byte[] Calcular(
+    internal static byte[] Calcular(
         string texto,
         byte[] sal)
     {

@@ -76,7 +76,8 @@ namespace TPMP_bpg_eca.Nucleo.Modelo
         /// <returns>Una cadena de texto (string) que contiene la sal generada.</returns>
         public string generadorSalClave()
         {
-            return "";
+            // Guardamos la sal como texto en el mismo formato que usa ServicioHash
+            return Convert.ToBase64String(ServicioHash.CrearSal());
         }
 
         /// <summary>
@@ -87,7 +88,10 @@ namespace TPMP_bpg_eca.Nucleo.Modelo
         /// <returns>La contraseña cifrada en formato de cadena hash.</returns>
         public string generadorHashClave(string clave, string sal)
         {
-            return "";
+            // Recuperamos los bytes de la sal recibida y calculamos el hash con ella.
+            byte[] bytesSal = Convert.FromBase64String(sal);
+            byte[] hash = ServicioHash.Calcular(clave, bytesSal);
+            return Convert.ToBase64String(hash);
         }
 
 
