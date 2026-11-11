@@ -89,10 +89,18 @@ namespace TPMP_bpg_eca.Nucleo.Modelo
         public string NombreCompleto() { return this._nombre + " " + this._apellido1 + " " + this._apellido2; }
 
         /// <summary>
-        /// Obtiene los paellidos del usuario.
+        /// Obtiene o establece los paellidos del usuario.
         /// </summary>
         /// <value>Cadena de texto con los paellidos del usuario.</value>
-        public string Apellidos { get { return this._apellido1 + " " + this._apellido2; } set { } }
+        public string Apellidos { 
+            get { return this._apellido1 + " " + this._apellido2; } 
+            set
+            {
+                string[] ap = value.Split(' ');
+                PrimerApellidoUsuario = ap[0];
+                SegundoApellidoUsuario = ap.Length > 1 ? ap[1] : "";
+            } 
+        }
 
         /// <summary>
         /// Obtiene o establece el e-mail único del usuario.
