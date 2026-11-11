@@ -1,9 +1,11 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Diagnostics.CodeAnalysis;
 using TPMP_bpg_eca.Nucleo.Seguridad;
 
 namespace TPMP_bpg_eca.Nucleo.Test;
 
 [TestClass]
+[ExcludeFromCodeCoverage]
 public class ServicioCifradoTest
 {
     [TestMethod]
@@ -40,6 +42,30 @@ public class ServicioCifradoTest
 
         // Comprobamos que el servicio señala la clave como causa del error
         Assert.AreEqual("claveBase64", error.ParamName);
+    }
+
+    [TestMethod]
+    public void ContenidoCifradoEsNulo_EnCifrar_ArgumentException()
+    {
+        // si se pasa null debería lanzarse una exceppcion Agument exception
+        // Generamos una clave para descifrar
+        string clave = ServicioCifrado.GenerarClave();
+
+        // Ciframos el mensaje y guardamos el resultado
+        string cifrado = null;
+        Assert.Throws<ArgumentException>(() => ServicioCifrado.Cifrar(cifrado, clave));
+    }
+
+    [TestMethod]
+    public void ContenidoCifradoEsNulo_EnDescifrar_ArgumentException()
+    {
+        // si se pasa null debería lanzarse una exceppcion Agument exception
+        // Generamos una clave para descifrar
+        string clave = ServicioCifrado.GenerarClave();
+
+        // Ciframos el mensaje y guardamos el resultado
+        string cifrado = null;
+        Assert.Throws<ArgumentException>(() => ServicioCifrado.Descifrar(cifrado, clave));
     }
 
 }

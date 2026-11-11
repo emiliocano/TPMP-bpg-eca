@@ -1,5 +1,7 @@
 ﻿// Permite definir las pruebas y comprobar sus resultados
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Diagnostics.CodeAnalysis;
+
 
 // Permite utilizar la clase Usuario
 using TPMP_bpg_eca.Nucleo.Modelo;
@@ -8,6 +10,7 @@ using TPMP_bpg_eca.Nucleo.Seguridad;
 namespace TPMP_bpg_eca.Nucleo.Test;
 
 [TestClass]
+[ExcludeFromCodeCoverage]
 public class UsuarioTest
 {
     [TestMethod]

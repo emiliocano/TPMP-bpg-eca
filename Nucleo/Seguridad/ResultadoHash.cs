@@ -13,7 +13,7 @@ namespace TPMP_bpg_eca.Nucleo.Seguridad
         public bool Equals(ResultadoHash? other)
         {
             if (ReferenceEquals(other, null)) return false;
-            if (ReferenceEquals(this, other)) return true;
+            // comparacion innecesaria if// (ReferenceEquals(this, other)) return true;
             return Hash == other.Hash && Sal == other.Sal;
         }
 

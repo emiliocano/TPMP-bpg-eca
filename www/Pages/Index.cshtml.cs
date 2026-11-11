@@ -7,7 +7,7 @@ namespace www.Pages
     {
         public void OnGet()
         {
-
+            return RedirectToPage("/Login/Index");
         }
     }
 }
