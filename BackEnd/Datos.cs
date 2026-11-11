@@ -125,6 +125,14 @@ namespace BackEnd
             return rol;
         }
 
+//TODO: implementar
+        public List<Proyecto> ProyectosTodos()
+        {
+
+            return new List<Proyecto>();
+        }
+
+
         public Rol? LeerRol(int idRol)
         {
             throw new NotImplementedException();

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection.Metadata.Ecma335;
 
 
 namespace TPMP_bpg_eca.Nucleo.Modelo
@@ -23,5 +24,8 @@ namespace TPMP_bpg_eca.Nucleo.Modelo
 
         // Un proyecto nuevo empieza activo
         public bool Activo { get; set; } = true;
+
+//TODO implementar
+//        public int Sort(Proyecto a, Proyecto b) { return 1; }
     }
 }

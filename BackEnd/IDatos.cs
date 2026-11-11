@@ -37,5 +37,9 @@ namespace BackEnd
         #endregion
 
         void Reiniciar();
+
+//TODO: implementar
+        public List<Proyecto> ProyectosTodos();
+
     }
 }

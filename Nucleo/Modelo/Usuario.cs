@@ -65,9 +65,39 @@ namespace TPMP_bpg_eca.Nucleo.Modelo
         public int IdUsuario { get { return this._id; } set { this._id = value; } }
 
         /// <summary>
-        /// Obtiene o establece el identificador único del usuario.
+        /// Obtiene o establece el nombre del usuario.
         /// </summary>
-        /// <value>El número entero que representa el ID del usuario en el sistema.</value>
+        /// <value>Cadena de texto con el nombre del usuario.</value>
+        public string Nombre { get { return this._nombre; } set { this._nombre = value; } }
+
+        /// <summary>
+        /// Obtiene o establece el primer apellido del usuario.
+        /// </summary>
+        /// <value>Cadena de texto con el segundo apellido del usuario.</value>
+        public string PrimerApellidoUsuario { get { return this._apellido1; } set { this._apellido1 = value; } }
+
+        /// <summary>
+        /// Obtiene o establece el segundo apellido del usuario.
+        /// </summary>
+        /// <value>Cadena de texto con el segundo appellido del usuario.</value>
+        public string SegundoApellidoUsuario { get { return this._apellido2; } set { this._apellido2 = value; } }
+
+        /// <summary>
+        /// Obtiene el nombre completo del usuario.
+        /// </summary>
+        /// <value>Cadena de texto con el nombre completo del usuario.</value>
+        public string NombreCompleto() { return this._nombre + " " + this._apellido1 + " " + this._apellido2; }
+
+        /// <summary>
+        /// Obtiene los paellidos del usuario.
+        /// </summary>
+        /// <value>Cadena de texto con los paellidos del usuario.</value>
+        public string Apellidos { get { return this._apellido1 + " " + this._apellido2; } set { } }
+
+        /// <summary>
+        /// Obtiene o establece el e-mail único del usuario.
+        /// </summary>
+        /// <value>El número entero que representa el e-mail del usuario en el sistema.</value>
         public string EMail { get { return this._eMail; } set { this._eMail = value; } }
 
         /// <summary>
@@ -100,6 +130,39 @@ namespace TPMP_bpg_eca.Nucleo.Modelo
             // Verifica la contraseña usando el hash y la sal guardados
             return ServicioHash.Verificar(Contraseña, _hashClave, _salClave);
         }
+
+//TODO: implementar
+        public bool CambiaPassword(string PasswordActual, string PasswordNueva)
+        {
+            return true;
+        }
+
+//TODO: implementar
+        public bool TieneCredencialesConfiguradas { get { return true; } }
+
+//TODO: implementar
+        public bool Activa { get { return true; } }
+
+//TODO: implementar
+        public int IntentosErroneos { get { return 1; } }
+
+//TODO: implementar
+        public int ListaPasswordsCount { get { return 1; } }
+
+//TODO: implementar
+        public DateTime FechaUltimoAcceso { get { return DateTime.Today; } }
+
+//TODO: implementar
+        public DateTime UltimoCambioPassword { get { return DateTime.Today; } }
+
+//TODO: implementar
+        public DateTime BloquearAccesoHasta { get { return DateTime.Today; } }
+
+//TODO: implementar
+        public DateTime CaducidadCuenta { get { return DateTime.Today; } }
+
+
+
     }
 
     /// <summary>

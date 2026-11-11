@@ -23,8 +23,7 @@ public class IndexModel : PageModel
     {
         int? idUsuario = HttpContext.Session.GetInt32(ClavesSesion.UsuarioId);
 
-        // Si no hay sesión, tampoco hay un ID de usuario
-        if (idUsuario is null || idUsuario <= 0)
+        if (idUsuario <= 0)
         {
             EliminarDatosSesion();
             return RedirectToPage("/Login/Index");
@@ -49,8 +48,8 @@ public class IndexModel : PageModel
         {
             var usuario = _datos.LeerUsuario(idUsuario.Value);
             if (usuario is not null)
-            { // Registra quién ha cerrado la sesión antes de borrar sus datos
-                _datos.AgregarLog(new EntradaLog(DateTime.Now,"Información","Cierre de sesión",usuario.EMail));
+            { // Registrar el evento antes de limpiar la sesión.
+                _datos.AgregarLog(new EntradaLog(DateTime.Now, "Inicio de Sesión", $"Cierre de Sesión {usuario.EMail}", usuario.ToString()));
             }
         }
         EliminarDatosSesion();
