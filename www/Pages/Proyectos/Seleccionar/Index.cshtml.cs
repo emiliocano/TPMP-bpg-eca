@@ -257,7 +257,7 @@ public class IndexModel : PageModel
          * Sustituye ToString() por la propiedad real
          * si Usuario tiene Nombre o NombreCompleto.
          */
-        NombreUsuario = usuario.NombreCompleto();
+        NombreUsuario = usuario.NombreCompleto;
 
         IdProyectoActual =
             HttpContext.Session.GetInt32(

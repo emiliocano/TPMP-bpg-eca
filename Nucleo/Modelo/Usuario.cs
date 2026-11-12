@@ -92,7 +92,7 @@ namespace TPMP_bpg_eca.Nucleo.Modelo
         /// Obtiene el nombre completo del usuario.
         /// </summary>
         /// <value>Cadena de texto con el nombre completo del usuario.</value>
-        public string NombreCompleto() { return this._nombre + " " + this._apellido1 + " " + this._apellido2; }
+        public string NombreCompleto { get { return (this._nombre + " " + this._apellido1 + " " + this._apellido2); } }
 
         /// <summary>
         /// Obtiene o establece los paellidos del usuario.

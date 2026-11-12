@@ -136,16 +136,88 @@ public class UsuarioTest
         Assert.AreEqual(nombreUsuario, nombreLeido);
     }
 
-//    [TestMethod]
-//    public void ModificaElNombreDelUsusario()
-//    {
-//        string nombreUsuario = "tester3";
-//        Usuario usuario = new Usuario(2, nombreUsuario, "tester3", "DemoLocal26!");
-//        string nombreNuevo = "tester_4";
-//        usuario.Nombre = nombreNuevo;
-//        string nombreLeido = usuario.Nombre;
-//        Assert.AreEqual(nombreNuevo, nombreLeido);
-//    }
+    [TestMethod]
+    public void EscribeYLeeElPrimerApellidoDelUsusario()
+    {
+        string apellido1_Usuario = "Lopez";
+        Usuario usuario = new Usuario(2, "tester3", "tester3@test.com", "DemoLocal26!");
+        usuario.PrimerApellidoUsuario = apellido1_Usuario;
+        string apellidoLeido = usuario.PrimerApellidoUsuario;
+        Assert.AreEqual(apellido1_Usuario, apellidoLeido);
+    }
+
+    [TestMethod]
+    public void EscribeYLeeElSegundoApellidoDelUsusario()
+    {
+        string apellido2_Usuario = "Martinez";
+        Usuario usuario = new Usuario(3, "tester3", "tester3@test.com", "DemoLocal26!");
+        usuario.SegundoApellidoUsuario = apellido2_Usuario;
+        string apellidoLeido = usuario.SegundoApellidoUsuario;
+        Assert.AreEqual(apellido2_Usuario, apellidoLeido);
+    }
+
+    [TestMethod]
+    public void LeeElnombreCompleto()
+    {
+        string nombreUsuario = "Eva";
+        string apellido1_Usuario = "Avia";
+        string apellido2_Usuario = "Moreno";
+        string nombreCompleto = nombreUsuario + " " + apellido1_Usuario + " " + apellido2_Usuario;
+        Usuario usuario = new Usuario(4, "tester4", "tester4@test.com", "DemoLocal26!");
+        usuario.Nombre = nombreUsuario;
+        usuario.PrimerApellidoUsuario = apellido1_Usuario;
+        usuario.SegundoApellidoUsuario = apellido2_Usuario;
+        string nombreCompletoLeido = usuario.NombreCompleto;
+        Assert.AreEqual(nombreCompleto, nombreCompletoLeido);
+    }
+
+    [TestMethod]
+    public void LeeLosDosApellidos()
+    {
+        string apellido1_Usuario = "Zapico";
+        string apellido2_Usuario = "Seara";
+        string apellidos = apellido1_Usuario + " " + apellido2_Usuario;
+        Usuario usuario = new Usuario(5, "tester5", "tester5@test.com", "DemoLocal26!");
+        usuario.PrimerApellidoUsuario = apellido1_Usuario;
+        usuario.SegundoApellidoUsuario = apellido2_Usuario;
+        string apelllidosLeidos = usuario.Apellidos;
+        Assert.AreEqual(apellidos, apelllidosLeidos);
+    }
+
+    [TestMethod]
+    public void ModificaLosDosApellidosALaVez()
+    {
+        string apellido1_Usuario = "Zapico";
+        string apellido2_Usuario = "Seara";
+        string apellidos = apellido1_Usuario + " " + apellido2_Usuario;
+        Usuario usuario = new Usuario(6, "tester6", "tester6@test.com", "DemoLocal26!");
+        usuario.Apellidos = apellido1_Usuario + " " + apellido2_Usuario;
+        string apelllidosLeidos = usuario.Apellidos;
+        Assert.AreEqual(apellidos, apelllidosLeidos);
+    }
+
+    [TestMethod]
+    public void CambiaClave_ClaveAntiguaMal()
+    {
+        Usuario usuario = new Usuario(7, "tester7", "tester7@test.com", "DemoLocal26!");
+        string ClaveAntigualMala = "Local26!";
+        string ClaveNueva = "M1claveNueva!";
+        bool resultado = usuario.CambiaPassword(ClaveAntigualMala, ClaveNueva);
+        Assert.IsFalse(resultado);
+    }
+
+    [TestMethod]
+    public void CambiaClave_ClaveAntiguaBien()
+    {
+        Usuario usuario = new Usuario(8, "tester8", "tester8@test.com", "DemoLocal26!");
+        string ClaveAntigual = "DemoLocal26!";
+        string ClaveNueva = "M1claveNueva!";
+        usuario.CambiaPassword(ClaveAntigual, ClaveNueva);
+        bool resultado = usuario.CompruebaPassword(ClaveNueva);
+        Assert.IsTrue(resultado);
+
+    }
+
 
 
 }
