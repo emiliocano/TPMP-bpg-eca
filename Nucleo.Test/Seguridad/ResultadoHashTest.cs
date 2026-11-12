@@ -93,6 +93,16 @@ public class ResultadoHashTest
     }
 
     [TestMethod]
+    public void Equals_ComoObjeto_MismaReferencia()
+    {
+        var resultado = new ResultadoHash { Hash = "hash-A", Sal = "sal-A" };
+        object otroIgual = resultado;
+
+        // Al declarar otroIgual como object, se prueba Equals(object)
+        Assert.IsTrue(resultado.Equals(otroIgual));
+    }
+
+    [TestMethod]
     public void Igualdad_ConResultadosNulos_ComparaAmbosLados()
     {
         ResultadoHash? ausente = null;
