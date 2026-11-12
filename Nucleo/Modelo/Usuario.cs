@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection.PortableExecutable;
 using System.Text;
 // Permite usar el servicio que genera y verifica las contraseñas
 using TPMP_bpg_eca.Nucleo.Seguridad;
@@ -142,6 +143,15 @@ namespace TPMP_bpg_eca.Nucleo.Modelo
 //TODO: implementar
         public bool CambiaPassword(string PasswordActual, string PasswordNueva)
         {
+            //comprobar que la clave antigua es correcta
+            if (CompruebaPassword(PasswordActual)) {
+                //pedir salt
+                string s = generadorSalClave();
+                //pedir hash
+                string h = generadorHashClave(PasswordNueva, s);
+                //guardar la salt y el has 
+//TODO: Guardar en Datos y en Usuario la sal y la clave                
+            }
             return true;
         }
 

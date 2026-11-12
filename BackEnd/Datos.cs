@@ -27,7 +27,7 @@ namespace BackEnd
         }
 
         #region Usuarios
-        // TODO: añadir metodo para inicializar usuarios iniciales?
+ // TODO: añadir metodo para inicializar usuarios iniciales?
         private void InicializarUsuarios()
         {
             // constructor recibe: ID, cuenta, correo y contraseña
@@ -44,7 +44,7 @@ namespace BackEnd
         {
             ArgumentNullException.ThrowIfNull(usuario);
 
-            // TODO: mirar como tiene que ser la comparación. Que id tiene un usuario nuevo
+// TODO: mirar como tiene que ser la comparación. Que id tiene un usuario nuevo
             if (usuario.IdUsuario < 0)
             {
                 usuario.IdUsuario = SiguienteIdUsuario++;
