@@ -3,7 +3,7 @@ using BackEnd;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using TPMP_bpg_eca.Nucleo.Modelo;
-using Nucleo.Servicios;
+using TPMP_bpg_eca.Nucleo.Servicios;
 using www.Utilidades;
 using UsuarioModelo = TPMP_bpg_eca.Nucleo.Modelo.Usuario;
 

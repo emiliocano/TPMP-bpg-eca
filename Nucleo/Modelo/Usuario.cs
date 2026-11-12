@@ -13,7 +13,6 @@ namespace TPMP_bpg_eca.Nucleo.Modelo
     /// </summary>
     public class Usuario
     {
-        private int _caducudadMeses;
         private int      _id;
         private string   _usuario;
         private string   _nombre;
@@ -27,6 +26,7 @@ namespace TPMP_bpg_eca.Nucleo.Modelo
         private DateTime _fechaUltimoAcceso;
         private int      _numPaswords;
         private int      _numPwdErroneas;
+        private int      _tiempoValidez;
 
         private string   _hashClave;
         private string   _salClave;
@@ -44,7 +44,7 @@ namespace TPMP_bpg_eca.Nucleo.Modelo
         /// <param name="clave">Contraseña en texto plano que será procesada con sal y hash.</param>
         public Usuario(int id, string cuenta, string eMail, string clave)
         {
-            _caducudadMeses = 3;
+            TiempoValidez = 3;
 
             // Guarda el identificador del usuario
             _id = id;
@@ -102,7 +102,7 @@ namespace TPMP_bpg_eca.Nucleo.Modelo
             get { return this._apellido1 + " " + this._apellido2; } 
             set
             {
-                string[] ap = value.Split(' ');
+                string[] ap = value.Trim().Split(' ');
                 PrimerApellidoUsuario = ap[0];
                 SegundoApellidoUsuario = ap.Length > 1 ? ap[1] : "";
             } 
@@ -185,24 +185,21 @@ namespace TPMP_bpg_eca.Nucleo.Modelo
 //TODO: implementar ¿la necesitamos?
         public bool Activa { get { return true; } }
 
-//TODO: implementar
+        //los incrementos no los lanza Usuario porque los fallos se podrian producir en el front end 
         public int IntentosErroneos { get { return _numPwdErroneas; } set { _numPwdErroneas = value; } }
 
-//TODO: implementar
         public int ListaPasswordsCount { get { return _numPaswords; } set { _numPaswords = value; } }
 
-//TODO: implementar test
-        public DateTime FechaUltimoAcceso { get { return _fechaUltimoAcceso; } set { _fechaUltimoAcceso = DateTime.Now; } }
+        public DateTime FechaUltimoAcceso { get { return _fechaUltimoAcceso; } set { _fechaUltimoAcceso = value; } }
 
-//TODO: implementar tests
         public DateTime UltimoCambioPassword { get { return _fechaCambioPwd; } set { _fechaCambioPwd = value; } }
 
-//TODO: implementar
+//TODO: implementar ¿la necesitamos?
         public DateTime BloquearAccesoHasta { get { return DateTime.Today.AddDays(-1); } }
 
-//TODO: implementar test
-        public DateTime CaducidadCuenta { get { return _fechaCambioPwd.AddMonths(_caducudadMeses); } }
+        public DateTime CaducidadCuenta { get { return _fechaCambioPwd.AddMonths(_tiempoValidez); } }
 
+        public int TiempoValidez { get { return _tiempoValidez; } set { _tiempoValidez = value; } }
 
 
     }

@@ -197,6 +197,18 @@ public class UsuarioTest
     }
 
     [TestMethod]
+    public void ModificaLosDosApellidosALaVez_SoloPrimerApellido()
+    {
+        string apellido1_Usuario = "Zapico";
+        string apellido2_Usuario = "";
+        string apellidos = apellido1_Usuario + " " + apellido2_Usuario;
+        Usuario usuario = new Usuario(6, "tester6", "tester6@test.com", "DemoLocal26!");
+        usuario.Apellidos = apellido1_Usuario + " " + apellido2_Usuario;
+        string apelllidosLeidos = usuario.Apellidos;
+        Assert.AreEqual(apellidos, apelllidosLeidos);
+    }
+
+    [TestMethod]
     public void CambiaClave_ClaveAntiguaMal()
     {
         Usuario usuario = new Usuario(7, "tester7", "tester7@test.com", "DemoLocal26!");
@@ -215,7 +227,69 @@ public class UsuarioTest
         usuario.CambiaPassword(ClaveAntigual, ClaveNueva);
         bool resultado = usuario.CompruebaPassword(ClaveNueva);
         Assert.IsTrue(resultado);
+    }
 
+    [TestMethod]
+    public void EscribeYLeeErroresAlPonerCave()
+    {
+        //los incrementos no los lanza Usuario porque los fallos se podrian producir en el front end 
+        Usuario usuario = new Usuario(9, "tester9", "tester9@test.com", "DemoLocal26!");
+        int erroresIniciales = 5;
+        int erroresFinales = erroresIniciales + 1;
+        usuario.IntentosErroneos = erroresIniciales;
+        Assert.AreEqual(erroresIniciales, usuario.IntentosErroneos);
+        usuario.IntentosErroneos = erroresFinales;
+        Assert.AreEqual(erroresFinales, usuario.IntentosErroneos);
+    }
+
+    [TestMethod]
+    public void EscribeYLeeFechaUltimoAcceso()
+    {
+        Usuario usuario = new Usuario(10, "tester10", "tester10@test.com", "DemoLocal26!");
+        DateTime fechaInicial = DateTime.Today.AddDays(-10);
+        DateTime fechaFinal = fechaInicial.AddDays(2);
+        usuario.FechaUltimoAcceso = fechaInicial;
+        Assert.AreEqual(fechaInicial, usuario.FechaUltimoAcceso);
+        usuario.FechaUltimoAcceso = fechaFinal;
+        Assert.AreEqual(fechaFinal, usuario.FechaUltimoAcceso);
+    }
+
+    [TestMethod]
+    public void EscribeYLeeFechaUltimoCambioDeClave()
+    {
+        Usuario usuario = new Usuario(11, "tester11", "tester11@test.com", "DemoLocal26!");
+        DateTime fechaInicial = DateTime.Today.AddDays(-20);
+        DateTime fechaFinal = fechaInicial.AddDays(2);
+        usuario.UltimoCambioPassword = fechaInicial;
+        Assert.AreEqual(fechaInicial, usuario.UltimoCambioPassword);
+        usuario.UltimoCambioPassword = fechaFinal;
+        Assert.AreEqual(fechaFinal, usuario.UltimoCambioPassword);
+    }
+
+    [TestMethod]
+    public void EscribeYLeeValidez()
+    {
+        //los incrementos no los lanza Usuario porque los fallos se podrian producir en el front end 
+        Usuario usuario = new Usuario(12, "tester12", "tester12@test.com", "DemoLocal26!");
+        int tiempoInicial = 5;
+        int tiempoFinal = tiempoInicial + 1;
+        usuario.TiempoValidez = tiempoInicial;
+        Assert.AreEqual(tiempoInicial, usuario.TiempoValidez);
+        usuario.TiempoValidez = tiempoFinal;
+        Assert.AreEqual(tiempoFinal, usuario.TiempoValidez);
+    }
+
+    [TestMethod]
+    public void FechaCaducidad()
+    {
+        //los incrementos no los lanza Usuario porque los fallos se podrian producir en el front end 
+        Usuario usuario = new Usuario(13, "tester13", "tester13@test.com", "DemoLocal26!");
+        DateTime fechaCambio = DateTime.Today.AddDays(-20);
+        usuario.UltimoCambioPassword = fechaCambio;
+        int tiempoValidez = 6;
+        usuario.TiempoValidez = tiempoValidez;
+        DateTime caducidad = usuario.CaducidadCuenta;
+        Assert.AreEqual(fechaCambio.AddMonths(tiempoValidez), caducidad);
     }
 
 
