@@ -126,5 +126,26 @@ public class UsuarioTest
         Assert.IsFalse(ServicioHash.Verificar("OtraClave12!", hash, sal));
     }
 
+    [TestMethod]
+    public void EscribeYLeeElNombreDelUsusario()
+    {
+        string nombreUsuario = "Pablo";
+        Usuario usuario = new Usuario(2, "tester3", "tester3@test.com", "DemoLocal26!");
+        usuario.Nombre = nombreUsuario;
+        string nombreLeido = usuario.Nombre;
+        Assert.AreEqual(nombreUsuario, nombreLeido);
+    }
+
+//    [TestMethod]
+//    public void ModificaElNombreDelUsusario()
+//    {
+//        string nombreUsuario = "tester3";
+//        Usuario usuario = new Usuario(2, nombreUsuario, "tester3", "DemoLocal26!");
+//        string nombreNuevo = "tester_4";
+//        usuario.Nombre = nombreNuevo;
+//        string nombreLeido = usuario.Nombre;
+//        Assert.AreEqual(nombreNuevo, nombreLeido);
+//    }
+
 
 }

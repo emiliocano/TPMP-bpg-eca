@@ -105,6 +105,7 @@ public class Index2Model : PageModel
                 // Registra el fallo cuando termina la comprobación
                 DateTimeOffset momentoFallo = DateTimeOffset.UtcNow;
                 usuario.ControlAcceso.RegistrarFallo(momentoFallo);
+                usuario.IntentosErroneos++;
 
                 // El tercer fallo activa el bloqueo de cinco minutos
                 if (usuario.ControlAcceso.EstaBloqueado(momentoFallo))

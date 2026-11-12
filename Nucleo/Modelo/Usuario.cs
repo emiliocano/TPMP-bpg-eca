@@ -13,6 +13,7 @@ namespace TPMP_bpg_eca.Nucleo.Modelo
     /// </summary>
     public class Usuario
     {
+        private int _caducudadMeses;
         private int      _id;
         private string   _usuario;
         private string   _nombre;
@@ -22,7 +23,10 @@ namespace TPMP_bpg_eca.Nucleo.Modelo
         private Rol      _rol;
         private Idioma   _idioma;
         private Boolean  _activo;
-        private DateTime _fechaCaducidad;
+        private DateTime _fechaCambioPwd;
+        private DateTime _fechaUltimoAcceso;
+        private int      _numPaswords;
+        private int      _numPwdErroneas;
 
         private string   _hashClave;
         private string   _salClave;
@@ -40,6 +44,8 @@ namespace TPMP_bpg_eca.Nucleo.Modelo
         /// <param name="clave">Contraseña en texto plano que será procesada con sal y hash.</param>
         public Usuario(int id, string cuenta, string eMail, string clave)
         {
+            _caducudadMeses = 3;
+
             // Guarda el identificador del usuario
             _id = id;
 
@@ -49,14 +55,13 @@ namespace TPMP_bpg_eca.Nucleo.Modelo
             // Guarda el correo electrónico
             _eMail = eMail;
 
-            // Genera el hash y su sal a partir de la contraseña
-            ResultadoHash resultado = ServicioHash.Generar(clave);
+            // inicializa el contador de claves
+            _numPaswords = 0;
 
-            // Guarda la sal utilizada para generar este hash
-            _salClave = resultado.Sal;
+            // inicializa el numero de claves erroneas 
+            _numPwdErroneas = 0;
 
-            // Guarda el hash para comprobar la contraseña más adelante
-            _hashClave = resultado.Hash;
+            CrearPassword(clave);
         }
 
         /// <summary>
@@ -144,40 +149,59 @@ namespace TPMP_bpg_eca.Nucleo.Modelo
         public bool CambiaPassword(string PasswordActual, string PasswordNueva)
         {
             //comprobar que la clave antigua es correcta
-            if (CompruebaPassword(PasswordActual)) {
-                //pedir salt
-                string s = generadorSalClave();
-                //pedir hash
-                string h = generadorHashClave(PasswordNueva, s);
-                //guardar la salt y el has 
-//TODO: Guardar en Datos y en Usuario la sal y la clave                
+            if (CompruebaPassword(PasswordActual))
+            {
+                CrearPassword(PasswordNueva);
+                return true;
             }
+            else
+            {
+                return false;
+            }
+        }
+
+        private bool CrearPassword(string clave)
+        {
+            // Genera el hash y su sal a partir de la contraseña
+            ResultadoHash resultado = ServicioHash.Generar(clave);
+
+            // Guarda la sal utilizada para generar este hash
+            _salClave = resultado.Sal;
+
+            // Guarda el hash para comprobar la contraseña más adelante
+            _hashClave = resultado.Hash;
+
+            // Se incrementa el numero de claves
+            ListaPasswordsCount++;
+
             return true;
         }
 
-//TODO: implementar
+
+
+//TODO: implementar ¿la necesitamos?
         public bool TieneCredencialesConfiguradas { get { return true; } }
 
-//TODO: implementar
+//TODO: implementar ¿la necesitamos?
         public bool Activa { get { return true; } }
 
 //TODO: implementar
-        public int IntentosErroneos { get { return 1; } }
+        public int IntentosErroneos { get { return _numPwdErroneas; } set { _numPwdErroneas = value; } }
 
 //TODO: implementar
-        public int ListaPasswordsCount { get { return 1; } }
+        public int ListaPasswordsCount { get { return _numPaswords; } set { _numPaswords = value; } }
+
+//TODO: implementar test
+        public DateTime FechaUltimoAcceso { get { return _fechaUltimoAcceso; } set { _fechaUltimoAcceso = DateTime.Now; } }
+
+//TODO: implementar tests
+        public DateTime UltimoCambioPassword { get { return _fechaCambioPwd; } set { _fechaCambioPwd = value; } }
 
 //TODO: implementar
-        public DateTime FechaUltimoAcceso { get { return DateTime.Today; } }
+        public DateTime BloquearAccesoHasta { get { return DateTime.Today.AddDays(-1); } }
 
-//TODO: implementar
-        public DateTime UltimoCambioPassword { get { return DateTime.Today; } }
-
-//TODO: implementar
-        public DateTime BloquearAccesoHasta { get { return DateTime.Today; } }
-
-//TODO: implementar
-        public DateTime CaducidadCuenta { get { return DateTime.Today; } }
+//TODO: implementar test
+        public DateTime CaducidadCuenta { get { return _fechaCambioPwd.AddMonths(_caducudadMeses); } }
 
 
 

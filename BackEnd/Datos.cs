@@ -12,9 +12,9 @@ namespace BackEnd
 
         public List<EntradaLog> Logs { get; }
 
-        public int SiguienteIdUsuario { get; set; }
-        public int SiguienteIdRol{ get; set; }
-        public int SiguienteIdProyecto { get; set; }
+        private int SiguienteIdUsuario { get; set; }
+        private int SiguienteIdRol{ get; set; }
+        private int SiguienteIdProyecto { get; set; }
 
         public Datos()
         {
@@ -22,12 +22,11 @@ namespace BackEnd
             Proyectos = new Dictionary<int, Proyecto>();
             Roles = new Dictionary<int, Rol>();
             Logs = new List<EntradaLog>();
-// TODO: llamar a reiniciar para poner los contadores a cero y crear ususarios, roles y proyectos iniciales para probar
+
            Reiniciar();
         }
 
         #region Usuarios
- // TODO: añadir metodo para inicializar usuarios iniciales?
         private void InicializarUsuarios()
         {
             // constructor recibe: ID, cuenta, correo y contraseña
@@ -39,12 +38,20 @@ namespace BackEnd
                 "DemoLocal26!");
 
             GuardarUsuario(admin);
+
+            Usuario tester1 = new Usuario(
+                -1,
+                "tester1",
+                "tester1@ubu.es",
+                "DemoLocal26!");
+
+            GuardarUsuario(tester1);
+
         }
         public Usuario? GuardarUsuario(Usuario usuario)
         {
             ArgumentNullException.ThrowIfNull(usuario);
 
-// TODO: mirar como tiene que ser la comparación. Que id tiene un usuario nuevo
             if (usuario.IdUsuario < 0)
             {
                 usuario.IdUsuario = SiguienteIdUsuario++;
