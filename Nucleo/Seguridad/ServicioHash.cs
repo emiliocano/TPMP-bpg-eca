@@ -18,9 +18,8 @@ public static class ServicioHash
     {
         if (string.IsNullOrWhiteSpace(texto))
         {
-            throw new ArgumentException("El texto no puede estar vacío.");
-            //Propuesta
-            //throw new InvalidOperationException("El texto no puede estar vacío.");
+            // ED-04 exige esta excepción cuando el texto no es válido
+            throw new InvalidOperationException("El texto no puede estar vacío");
         }
 
         byte[] sal = CrearSal();

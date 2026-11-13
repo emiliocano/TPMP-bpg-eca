@@ -23,7 +23,7 @@ public class IndexModel : PageModel
     {
         int? idUsuario = HttpContext.Session.GetInt32(ClavesSesion.UsuarioId);
 
-        if (idUsuario <= 0)
+        if (idUsuario is null || idUsuario <= 0)
         {
             EliminarDatosSesion();
             return RedirectToPage("/Login/Index");

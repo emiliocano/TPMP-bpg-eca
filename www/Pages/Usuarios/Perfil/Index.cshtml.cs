@@ -233,7 +233,8 @@ public class IndexModel : PageModel
     private void CargarDatosCuenta(Usuario usuario)
     {
         IdUsuario = usuario.IdUsuario;
-        SinPassword = usuario.TieneCredencialesConfiguradas;
+        //SinPassword = usuario.TieneCredencialesConfiguradas; NO tiene credenciales
+        SinPassword = !usuario.TieneCredencialesConfiguradas;
         CuentaActiva = usuario.Activa;
         Rol = 0;
         IntentosErroneos = usuario.IntentosErroneos;
@@ -245,7 +246,12 @@ public class IndexModel : PageModel
 
         UltimoCambioPasswordTexto = Formatos.FormatearFecha(usuario.UltimoCambioPassword);
 
-        BloquearAccesoHastaTexto = Formatos.FormatearFecha(usuario.BloquearAccesoHasta);
+        //aparecerá Sin bloqueo. Cuando lo haya, se mostrará la fecha real que proporciona ControlAcceso
+        DateTime bloqueoHasta = usuario.BloquearAccesoHasta;
+
+        BloquearAccesoHastaTexto = bloqueoHasta == default
+            ? "Sin bloqueo"
+            : Formatos.FormatearFecha(bloqueoHasta);
 
         CaducidadCuentaTexto = Formatos.FormatearFecha(usuario.CaducidadCuenta);
     }

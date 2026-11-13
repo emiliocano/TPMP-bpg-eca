@@ -21,7 +21,8 @@ namespace TPMP_bpg_eca.Nucleo.Modelo
         private string   _eMail;
         private Rol      _rol;
         private Idioma   _idioma;
-        private Boolean  _activo;
+        //conectar la propiedad Activa con este campo, queremos que los usuarios creados inicialmente puedan entrar. Sin inicializarlo, su valor sería falso
+        private bool _activo = true;
         private DateTime _fechaCambioPwd;
         private DateTime _fechaUltimoAcceso;
         private int      _numPaswords;
@@ -171,19 +172,32 @@ namespace TPMP_bpg_eca.Nucleo.Modelo
             // Guarda el hash para comprobar la contraseña más adelante
             _hashClave = resultado.Hash;
 
-            // Se incrementa el numero de claves
+            // Se incrementa el numero de claves.
             ListaPasswordsCount++;
+
+            // Guarda cuándo se ha establecido la contraseña.
+            UltimoCambioPassword = DateTime.Now;
 
             return true;
         }
 
 
 
-//TODO: implementar ¿la necesitamos?
-        public bool TieneCredencialesConfiguradas { get { return true; } }
+        public bool TieneCredencialesConfiguradas
+        {
+            get
+            {
+                // La contraseña se representa mediante su hash y su sal
+                return !string.IsNullOrWhiteSpace(_hashClave)
+                    && !string.IsNullOrWhiteSpace(_salClave);
+            }
+        }
 
-//TODO: implementar ¿la necesitamos?
-        public bool Activa { get { return true; } }
+        public bool Activa
+        {
+            get { return _activo; }
+            set { _activo = value; }
+        }
 
         //los incrementos no los lanza Usuario porque los fallos se podrian producir en el front end 
         public int IntentosErroneos { get { return _numPwdErroneas; } set { _numPwdErroneas = value; } }
@@ -194,9 +208,24 @@ namespace TPMP_bpg_eca.Nucleo.Modelo
 
         public DateTime UltimoCambioPassword { get { return _fechaCambioPwd; } set { _fechaCambioPwd = value; } }
 
-//TODO: implementar ¿la necesitamos?
-        public DateTime BloquearAccesoHasta { get { return DateTime.Today.AddDays(-1); } }
+        public DateTime BloquearAccesoHasta
+        {
+            get
+            {
+                lock (ControlAcceso)
+                {
+                    // Comprueba si el bloqueo continúa vigente
+                    if (!ControlAcceso.EstaBloqueado(DateTimeOffset.UtcNow))
+                    {
+                        return default;
+                    }
 
+                    // Devuelve la fecha del bloqueo en la hora local del servidor
+                    return ControlAcceso.BloqueadoHasta?.LocalDateTime
+                        ?? default;
+                }
+            }
+        }
         public DateTime CaducidadCuenta { get { return _fechaCambioPwd.AddMonths(_tiempoValidez); } }
 
         public int TiempoValidez { get { return _tiempoValidez; } set { _tiempoValidez = value; } }

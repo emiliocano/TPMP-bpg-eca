@@ -12,9 +12,8 @@ namespace TPMP_bpg_eca.Nucleo.Servicios
             if (fecha == default) {
                 return "No consta";
             }
-            return fecha.ToString("dd/MM/yyyy HH:mm:ss");
-            //Propuesta:
-            //return fecha.ToString("dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture);
+            
+            return fecha.ToString("dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture);
         }
     }
 }

@@ -64,7 +64,8 @@ public class Index2Model : PageModel
 
         Usuario? usuario = _datos.LeerUsuario(EMail);
 
-        if (usuario is null)
+        // Rechaza usuarios inexistentes o cuentas desactivadas.
+        if (usuario is null || !usuario.Activa)
         {
             ModelState.AddModelError(
                 "Contraseña",
