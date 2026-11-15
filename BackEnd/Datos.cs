@@ -52,26 +52,28 @@ namespace BackEnd
         {
             ArgumentNullException.ThrowIfNull(usuario);
 
+            string mensaje;
+
             if (usuario.IdUsuario < 0)
             {
                 usuario.IdUsuario = SiguienteIdUsuario++;
                 Usuarios.Add(usuario.IdUsuario, usuario);
-// TODO: mirar como añadir logs y corregir
-//                AgregarLog(new EntradaLog($"Usuario añadido: {usuario.EMail}"));
+                mensaje = "Usuario añadido";
+            }
+            else if (Usuarios.ContainsKey(usuario.IdUsuario))
+            {
+                Usuarios[usuario.IdUsuario] = usuario;
+                mensaje = "Usuario actualizado";
             }
             else
             {
-                if (Usuarios.ContainsKey(usuario.IdUsuario))
-                {
-                    Usuarios[usuario.IdUsuario] = usuario;
-// TODO: mirar como añadir a logs y corregir
-//                  AgregarLog(new EntradaLog($"Usuario actualizado: {usuario.EMail}"));
-                }
-                else
-                {
-                    throw new KeyNotFoundException($"No se encontó el usuario con Id {usuario.IdUsuario}");
-                }
+                throw new KeyNotFoundException(
+                    $"No se encontró el usuario con Id {usuario.IdUsuario}");
             }
+
+            AgregarLog(new EntradaLog(
+                DateTime.Now, "Información", mensaje, usuario.EMail));
+
             return usuario;
         }
 
@@ -213,7 +215,7 @@ namespace BackEnd
             Usuarios.Clear();
             Roles.Clear();
             Proyectos.Clear();
-            Logs.Clear();
+            
 
             // El primer elemento de cada tipo recibirá el identificador 1
             SiguienteIdUsuario = 1;
@@ -224,6 +226,7 @@ namespace BackEnd
             InicializarRoles();
             InicializarUsuarios();
             InicializarProyectos();
+            LimpiarLog();
         }
     }
 }
