@@ -146,20 +146,18 @@ namespace TPMP_bpg_eca.Nucleo.Modelo
             return ServicioHash.Verificar(Contraseña, _hashClave, _salClave);
         }
 
-//TODO: implementar
+        //TODO: implementar
         public bool CambiaPassword(string PasswordActual, string PasswordNueva)
         {
-            //comprobar que la clave antigua es correcta
-            if (CompruebaPassword(PasswordActual))
-            {
-                CrearPassword(PasswordNueva);
-                ListaPasswordsCount++;
-                return true;
-            }
-            else
+            if (string.IsNullOrWhiteSpace(PasswordNueva) ||
+                !CompruebaPassword(PasswordActual))
             {
                 return false;
             }
+            //solo se cambia la contraseña y se incrementa el contador cuando se superan ambas comprobaciones
+            CrearPassword(PasswordNueva);
+            ListaPasswordsCount++;
+            return true;
         }
 
         private bool CrearPassword(string clave)

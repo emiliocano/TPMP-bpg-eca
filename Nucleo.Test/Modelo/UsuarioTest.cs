@@ -230,6 +230,21 @@ public class UsuarioTest
     }
 
     [TestMethod]
+    [DataRow(null)]
+    [DataRow("")]
+    [DataRow("   ")]
+    public void CambiaPassword_NuevaClaveEnBlanco_ConservaLaActual(string? claveNueva)
+    {
+        const string claveActual = "DemoLocal26!";
+        var usuario = new Usuario(1, "tester", "tester@example.test", claveActual);
+
+        bool resultado = usuario.CambiaPassword(claveActual, claveNueva!);
+
+        Assert.IsFalse(resultado);
+        Assert.IsTrue(usuario.CompruebaPassword(claveActual));
+        Assert.AreEqual(0, usuario.ListaPasswordsCount);
+    }
+    [TestMethod]
     public void EscribeYLeeErroresAlPonerCave()
     {
         //los incrementos no los lanza Usuario porque los fallos se podrian producir en el front end 
