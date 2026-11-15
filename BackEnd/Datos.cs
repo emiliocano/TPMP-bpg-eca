@@ -90,8 +90,8 @@ namespace BackEnd
         }
 
         public Usuario? EliminarUsuario(int idUsuario)
-        {
-            throw new NotImplementedException();
+        {//Remove elimina la entrada del diccionario y recupera el usuario eliminado
+            return Usuarios.Remove(idUsuario, out var usuario) ? usuario : null;
         }
         #endregion Usuarios
 
