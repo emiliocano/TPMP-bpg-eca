@@ -4,13 +4,16 @@ namespace BackEnd
 {
     public class Datos : IDatos
     {
-        public Dictionary<int, Usuario> Usuarios { get;}
-
-        public Dictionary<int, Rol> Roles { get; }
-
-        public Dictionary<int, Proyecto> Proyectos { get; }
-
-        public List<EntradaLog> Logs { get; }
+        private readonly Dictionary<int, Usuario> _usuarios;
+        private readonly Dictionary<int, Rol> _roles;
+        private readonly Dictionary<int, Proyecto> _proyectos;
+        private readonly List<EntradaLog> _logs;
+        //Crea otro diccionario con las mismas entradas. La copia protege la estructura de la colección
+        //Los objetos que contiene son referencias a las entidades almacenadas
+        public Dictionary<int, Usuario> Usuarios => new(_usuarios);
+        public Dictionary<int, Rol> Roles => new(_roles);
+        public Dictionary<int, Proyecto> Proyectos => new(_proyectos);
+        public List<EntradaLog> Logs => new(_logs);
 
         private int SiguienteIdUsuario { get; set; }
         private int SiguienteIdRol{ get; set; }
@@ -18,15 +21,15 @@ namespace BackEnd
 
         public Datos()
         {
-            Usuarios = new Dictionary<int, Usuario>();
-            Proyectos = new Dictionary<int, Proyecto>();
-            Roles = new Dictionary<int, Rol>();
-            Logs = new List<EntradaLog>();
+            _usuarios = new Dictionary<int, Usuario>();
+            _proyectos = new Dictionary<int, Proyecto>();
+            _roles = new Dictionary<int, Rol>();
+            _logs = new List<EntradaLog>();
 
            Reiniciar();
         }
 
-        #region Usuarios
+        #region _usuarios
         private void InicializarUsuarios()
         {
             // constructor recibe: ID, cuenta, correo y contraseña
@@ -57,12 +60,12 @@ namespace BackEnd
             if (usuario.IdUsuario < 0)
             {
                 usuario.IdUsuario = SiguienteIdUsuario++;
-                Usuarios.Add(usuario.IdUsuario, usuario);
+                _usuarios.Add(usuario.IdUsuario, usuario);
                 mensaje = "Usuario añadido";
             }
-            else if (Usuarios.ContainsKey(usuario.IdUsuario))
+            else if (_usuarios.ContainsKey(usuario.IdUsuario))
             {
-                Usuarios[usuario.IdUsuario] = usuario;
+                _usuarios[usuario.IdUsuario] = usuario;
                 mensaje = "Usuario actualizado";
             }
             else
@@ -80,24 +83,24 @@ namespace BackEnd
         public Usuario? LeerUsuario(int idUsuario)
         {
             // La página principal recupera al usuario usando el ID guardado en sesión
-            return Usuarios.GetValueOrDefault(idUsuario);
+            return _usuarios.GetValueOrDefault(idUsuario);
         }
 
         public Usuario? LeerUsuario(string eMail)
         {
             // La pantalla de contraseña busca al usuario por su correo
             // Si no hay coincidencia, FirstOrDefault devuelve null
-            return Usuarios.Values.FirstOrDefault(usuario =>
+            return _usuarios.Values.FirstOrDefault(usuario =>
                 string.Equals(usuario.EMail, eMail, StringComparison.OrdinalIgnoreCase));
         }
 
         public Usuario? EliminarUsuario(int idUsuario)
         {//Remove elimina la entrada del diccionario y recupera el usuario eliminado
-            return Usuarios.Remove(idUsuario, out var usuario) ? usuario : null;
+            return _usuarios.Remove(idUsuario, out var usuario) ? usuario : null;
         }
-        #endregion Usuarios
+        #endregion _usuarios
 
-        #region Roles
+        #region _roles
         // TODO: añadir metodo para inicializar roles iniciales?
         private void InicializarRoles()
         {
@@ -110,7 +113,7 @@ namespace BackEnd
         {
             // Guarda el suceso que recibe desde la aplicación
             ArgumentNullException.ThrowIfNull(log);
-            Logs.Add(log);
+            _logs.Add(log);
         }
 
         public Rol? GuardarRol(Rol rol)
@@ -120,11 +123,11 @@ namespace BackEnd
             if (rol.IdRol < 0)
             {
                 rol.IdRol = SiguienteIdRol++;
-                Roles.Add(rol.IdRol, rol);
+                _roles.Add(rol.IdRol, rol);
             }
-            else if (Roles.ContainsKey(rol.IdRol))
+            else if (_roles.ContainsKey(rol.IdRol))
             {
-                Roles[rol.IdRol] = rol;
+                _roles[rol.IdRol] = rol;
             }
             else
             {
@@ -138,20 +141,20 @@ namespace BackEnd
 
         public List<Proyecto> ProyectosTodos()
         {
-            return new List<Proyecto>(Proyectos.Values);
+            return new List<Proyecto>(_proyectos.Values);
         }
 
 
         public Rol? LeerRol(int idRol)
         {
-            return Roles.GetValueOrDefault(idRol);
+            return _roles.GetValueOrDefault(idRol);
         }
 
         public Rol? EliminarRol(int idRol)
         {//Remove quita la entrada del diccionario y permite devolver el rol eliminado
-            return Roles.Remove(idRol, out var rol) ? rol : null;
+            return _roles.Remove(idRol, out var rol) ? rol : null;
         }
-        #endregion Roles
+        #endregion _roles
 
         #region Proyecto
         // TODO: añadir metodo para inicializar proyectos iniciales?
@@ -169,7 +172,7 @@ namespace BackEnd
         }
         public Proyecto? EliminarProyecto(int idProyecto)
         {//el método devuelve el objeto eliminado o null si ese ID no existe
-            return Proyectos.Remove(idProyecto, out var proyecto) ? proyecto : null;
+            return _proyectos.Remove(idProyecto, out var proyecto) ? proyecto : null;
         }
 
         public Proyecto? GuardarProyecto(Proyecto proyecto)
@@ -181,12 +184,12 @@ namespace BackEnd
             {
                 // Proyecto.cs ya utiliza -1 para un proyecto nuevo
                 proyecto.IdProyecto = SiguienteIdProyecto++;
-                Proyectos.Add(proyecto.IdProyecto, proyecto);
+                _proyectos.Add(proyecto.IdProyecto, proyecto);
             }
-            else if (Proyectos.ContainsKey(proyecto.IdProyecto))
+            else if (_proyectos.ContainsKey(proyecto.IdProyecto))
             {
                 // Si el ID ya existe, actualiza ese proyecto
-                Proyectos[proyecto.IdProyecto] = proyecto;
+                _proyectos[proyecto.IdProyecto] = proyecto;
             }
             else
             {
@@ -199,23 +202,23 @@ namespace BackEnd
 
         public Proyecto? LeerProyecto(int idProyecto)
         {
-            return Proyectos.GetValueOrDefault(idProyecto);
+            return _proyectos.GetValueOrDefault(idProyecto);
         }
         #endregion Proyecto
 
         public int LimpiarLog()
         {
-            int entradasEliminadas = Logs.Count;
-            Logs.Clear();
+            int entradasEliminadas = _logs.Count;
+            _logs.Clear();
             return entradasEliminadas;
         }
         // TODO: Poner los contadores a cero y crear ususarios, roles y proyectos iniciales para probar
         public void Reiniciar()
         {
             // Vacía los datos que hubiera de una ejecución anterior del reinicio
-            Usuarios.Clear();
-            Roles.Clear();
-            Proyectos.Clear();
+            _usuarios.Clear();
+            _roles.Clear();
+            _proyectos.Clear();
             
 
             // El primer elemento de cada tipo recibirá el identificador 1
