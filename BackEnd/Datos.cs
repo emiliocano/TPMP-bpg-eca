@@ -141,7 +141,7 @@ namespace BackEnd
 
         public Rol? LeerRol(int idRol)
         {
-            throw new NotImplementedException();
+            return Roles.GetValueOrDefault(idRol);
         }
 
         public Rol? EliminarRol(int idRol)
