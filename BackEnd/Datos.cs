@@ -165,8 +165,8 @@ namespace BackEnd
             GuardarProyecto(proyecto);
         }
         public Proyecto? EliminarProyecto(int idProyecto)
-        {
-            throw new NotImplementedException();
+        {//el método devuelve el objeto eliminado o null si ese ID no existe
+            return Proyectos.Remove(idProyecto, out var proyecto) ? proyecto : null;
         }
 
         public Proyecto? GuardarProyecto(Proyecto proyecto)
