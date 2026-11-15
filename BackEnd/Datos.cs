@@ -145,8 +145,8 @@ namespace BackEnd
         }
 
         public Rol? EliminarRol(int idRol)
-        {
-            throw new NotImplementedException();
+        {//Remove quita la entrada del diccionario y permite devolver el rol eliminado
+            return Roles.Remove(idRol, out var rol) ? rol : null;
         }
         #endregion Roles
 
