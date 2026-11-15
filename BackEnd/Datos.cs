@@ -132,11 +132,10 @@ namespace BackEnd
             return rol;
         }
 
-//TODO: implementar
+        
         public List<Proyecto> ProyectosTodos()
         {
-
-            return new List<Proyecto>();
+            return new List<Proyecto>(Proyectos.Values);
         }
 
 
