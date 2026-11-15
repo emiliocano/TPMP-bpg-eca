@@ -9,7 +9,7 @@ namespace TPMP_bpg_eca.Nucleo.Modelo
     /// </summary>
     public class Rol
     {
-        private int _id;
+        private int _id = -1;
         private string _nombre;
 
         /// <summary>
