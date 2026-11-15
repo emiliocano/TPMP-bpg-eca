@@ -258,6 +258,29 @@ public class UsuarioTest
     }
 
     [TestMethod]
+    [DataRow(2, 0, false)]
+    [DataRow(3, 0, true)]
+    [DataRow(3, -10, false)]
+    public void BloquearAccesoHasta_DevuelveFechaSoloParaBloqueoVigente(
+    int intentos, int minutosDesdeAhora, bool bloqueoVigente)
+    {
+        var usuario = new Usuario(1, "tester", "tester@example.test", "DemoLocal26!");
+        var momentoDelFallo = DateTimeOffset.UtcNow.AddMinutes(minutosDesdeAhora);
+
+        for (int intento = 0; intento < intentos; intento++)
+        {
+            usuario.ControlAcceso.RegistrarFallo(momentoDelFallo);
+        }
+
+        DateTime fechaEsperada = bloqueoVigente
+            ? momentoDelFallo.AddMinutes(5).LocalDateTime
+            : default;
+
+        Assert.AreEqual(fechaEsperada, usuario.BloquearAccesoHasta);
+    }
+
+
+    [TestMethod]
     public void EscribeYLeeErroresAlPonerCave()
     {
         //los incrementos no los lanza Usuario porque los fallos se podrian producir en el front end 
