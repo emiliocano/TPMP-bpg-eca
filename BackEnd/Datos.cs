@@ -202,9 +202,11 @@ namespace BackEnd
 
         public int LimpiarLog()
         {
-            throw new NotImplementedException();
+            int entradasEliminadas = Logs.Count;
+            Logs.Clear();
+            return entradasEliminadas;
         }
-// TODO: Poner los contadores a cero y crear ususarios, roles y proyectos iniciales para probar
+        // TODO: Poner los contadores a cero y crear ususarios, roles y proyectos iniciales para probar
         public void Reiniciar()
         {
             // Vacía los datos que hubiera de una ejecución anterior del reinicio
