@@ -196,7 +196,7 @@ namespace BackEnd
 
         public Proyecto? LeerProyecto(int idProyecto)
         {
-            throw new NotImplementedException();
+            return Proyectos.GetValueOrDefault(idProyecto);
         }
         #endregion Proyecto
 
