@@ -29,8 +29,8 @@ namespace TPMP_bpg_eca.Nucleo.Modelo
         private int      _numPwdErroneas;
         private int      _tiempoValidez;
 
-        private string   _hashClave;
-        private string   _salClave;
+        private string _hashClave = string.Empty;
+        private string _salClave = string.Empty;
 
         // Guarda los fallos y el tiempo de bloqueo de este usuario
         public ControlIntentosAcceso ControlAcceso { get; } =
@@ -43,7 +43,7 @@ namespace TPMP_bpg_eca.Nucleo.Modelo
         /// <param name="cuenta">Nombre de usuario o cuenta de acceso al sistema.</param>
         /// <param name="eMail">Dirección de correo electrónico principal del usuario.</param>
         /// <param name="clave">Contraseña en texto plano que será procesada con sal y hash.</param>
-        public Usuario(int id, string cuenta, string eMail, string clave)
+        public Usuario(int id, string cuenta, string eMail, string? clave = null)
         {
             TiempoValidez = 3;
 
@@ -62,7 +62,10 @@ namespace TPMP_bpg_eca.Nucleo.Modelo
             // inicializa el numero de claves erroneas 
             _numPwdErroneas = 0;
 
-            CrearPassword(clave);
+            if (clave is not null)
+            {
+                CrearPassword(clave);
+            }
         }
 
         /// <summary>
@@ -146,17 +149,31 @@ namespace TPMP_bpg_eca.Nucleo.Modelo
             return ServicioHash.Verificar(Contraseña, _hashClave, _salClave);
         }
 
-        //TODO: implementar
         public bool CambiaPassword(string PasswordActual, string PasswordNueva)
-        {
-            if (string.IsNullOrWhiteSpace(PasswordNueva) ||
-                !CompruebaPassword(PasswordActual))
+        {//La primera asignación se hace con la contraseña actual vacía y deja el contador en 0
+         //A partir de ahí, cada cambio requiere la contraseña actual correcta
+            if (string.IsNullOrWhiteSpace(PasswordNueva))
             {
                 return false;
             }
-            //solo se cambia la contraseña y se incrementa el contador cuando se superan ambas comprobaciones
+
+            bool teniaCredenciales = TieneCredencialesConfiguradas;
+            bool claveActualValida = teniaCredenciales
+                ? CompruebaPassword(PasswordActual)
+                : string.IsNullOrEmpty(PasswordActual);
+
+            if (!claveActualValida)
+            {
+                return false;
+            }
+
             CrearPassword(PasswordNueva);
-            ListaPasswordsCount++;
+
+            if (teniaCredenciales)
+            {
+                ListaPasswordsCount++;
+            }
+
             return true;
         }
 
@@ -222,8 +239,9 @@ namespace TPMP_bpg_eca.Nucleo.Modelo
                 }
             }
         }
-        public DateTime CaducidadCuenta { get { return _fechaCambioPwd.AddMonths(_tiempoValidez); } }
-
+        public DateTime CaducidadCuenta => UltimoCambioPassword == default
+            ? default
+            : UltimoCambioPassword.AddMonths(TiempoValidez);
         public int TiempoValidez { get { return _tiempoValidez; } set { _tiempoValidez = value; } }
 
 

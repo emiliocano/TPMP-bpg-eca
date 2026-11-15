@@ -261,6 +261,7 @@ public class UsuarioTest
     [DataRow(2, 0, false)]
     [DataRow(3, 0, true)]
     [DataRow(3, -10, false)]
+
     public void BloquearAccesoHasta_DevuelveFechaSoloParaBloqueoVigente(
     int intentos, int minutosDesdeAhora, bool bloqueoVigente)
     {
@@ -278,7 +279,24 @@ public class UsuarioTest
 
         Assert.AreEqual(fechaEsperada, usuario.BloquearAccesoHasta);
     }
+    [TestMethod]
+    public void TieneCredencialesConfiguradas_TrasAsignarLaPrimeraClave_DevuelveTrue()
+    {
+        const string primeraClave = "DemoLocal26!";
+        var usuario = new Usuario(1, "tester", "tester@example.test");
 
+        Assert.IsFalse(usuario.TieneCredencialesConfiguradas);
+        Assert.AreEqual(DateTime.MinValue, usuario.CaducidadCuenta);
+
+        Assert.IsTrue(usuario.CambiaPassword(string.Empty, primeraClave));
+
+        Assert.IsTrue(usuario.TieneCredencialesConfiguradas);
+        Assert.IsTrue(usuario.CompruebaPassword(primeraClave));
+        Assert.AreEqual(0, usuario.ListaPasswordsCount);
+        Assert.AreEqual(
+            usuario.UltimoCambioPassword.AddMonths(usuario.TiempoValidez),
+            usuario.CaducidadCuenta);
+    }
 
     [TestMethod]
     public void EscribeYLeeErroresAlPonerCave()
