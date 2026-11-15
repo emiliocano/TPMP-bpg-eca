@@ -153,6 +153,7 @@ namespace TPMP_bpg_eca.Nucleo.Modelo
             if (CompruebaPassword(PasswordActual))
             {
                 CrearPassword(PasswordNueva);
+                ListaPasswordsCount++;
                 return true;
             }
             else
@@ -171,9 +172,6 @@ namespace TPMP_bpg_eca.Nucleo.Modelo
 
             // Guarda el hash para comprobar la contraseña más adelante
             _hashClave = resultado.Hash;
-
-            // Se incrementa el numero de claves.
-            ListaPasswordsCount++;
 
             // Guarda cuándo se ha establecido la contraseña.
             UltimoCambioPassword = DateTime.Now;
