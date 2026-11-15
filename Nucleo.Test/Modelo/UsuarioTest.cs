@@ -244,6 +244,19 @@ public class UsuarioTest
         Assert.IsTrue(usuario.CompruebaPassword(claveActual));
         Assert.AreEqual(0, usuario.ListaPasswordsCount);
     }
+
+    [TestMethod]
+    public void Activa_AlDesactivarLaCuenta_DevuelveFalse()
+    {
+        var usuario = new Usuario(1, "tester", "tester@example.test", "DemoLocal26!");
+
+        Assert.IsTrue(usuario.Activa);
+
+        usuario.Activa = false;
+
+        Assert.IsFalse(usuario.Activa);
+    }
+
     [TestMethod]
     public void EscribeYLeeErroresAlPonerCave()
     {
