@@ -9,7 +9,8 @@
 
         public const string UsuarioId =
             "Usuario.Id";
-
+        public const string FechaAccesoAnterior = "Usuario.FechaAccesoAnterior";
+        public const string FechaAccesoActual = "Usuario.FechaAccesoActual";
         public const string ProyectoActualId =
             "ProyectoActual.Id";
     }

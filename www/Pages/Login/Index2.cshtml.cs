@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using TPMP_bpg_eca.Nucleo.Modelo;
 using System.ComponentModel.DataAnnotations;
 using www.Utilidades;
+using TPMP_bpg_eca.Nucleo.Servicios;
 
 namespace www.Pages.Login;
 
@@ -131,6 +132,17 @@ public class Index2Model : PageModel
 
             // Una contraseña correcta reinicia los fallos anteriores
             usuario.ControlAcceso.RegistrarAcierto(DateTimeOffset.UtcNow);
+
+            //Primero guardas la fecha del acceso anterior para mostrarla en el perfil y luego registras la hora del nuevo acceso
+            HttpContext.Session.SetString(
+            ClavesSesion.FechaAccesoAnterior,
+            Formatos.FormatearFecha(usuario.FechaUltimoAcceso));
+
+            usuario.FechaUltimoAcceso = DateTime.Now;
+
+            HttpContext.Session.SetString(
+            ClavesSesion.FechaAccesoActual,
+            Formatos.FormatearFecha(usuario.FechaUltimoAcceso));
         }
 
         // Usuario correctamente autenticado

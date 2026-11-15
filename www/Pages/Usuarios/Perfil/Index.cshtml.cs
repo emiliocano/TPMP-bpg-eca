@@ -240,10 +240,11 @@ public class IndexModel : PageModel
         IntentosErroneos = usuario.IntentosErroneos;
         NumeroPasswordsAnteriores = usuario.ListaPasswordsCount;
 
-        FechaUltimoAccesoTexto = Formatos.FormatearFecha(usuario.FechaUltimoAcceso);
+        FechaUltimoAccesoTexto =
+        HttpContext.Session.GetString(ClavesSesion.FechaAccesoAnterior) ?? "No consta";
 
-        FechaAccesoActualTexto = Formatos.FormatearFecha(usuario.FechaUltimoAcceso);
-
+        FechaAccesoActualTexto =
+        HttpContext.Session.GetString(ClavesSesion.FechaAccesoActual) ?? "No consta";
         UltimoCambioPasswordTexto = Formatos.FormatearFecha(usuario.UltimoCambioPassword);
 
         //aparecerá Sin bloqueo. Cuando lo haya, se mostrará la fecha real que proporciona ControlAcceso
