@@ -115,26 +115,27 @@ namespace BackEnd
 
         public Rol? GuardarRol(Rol rol)
         {
-// TODO: revisar
             ArgumentNullException.ThrowIfNull(rol);
 
             if (rol.IdRol < 0)
             {
                 rol.IdRol = SiguienteIdRol++;
                 Roles.Add(rol.IdRol, rol);
-// TODO: mirar como añadir a logs y corregir
-//                AgregarLog(new EntradaLog($"Rol añadido: {rol.Nombre}"));
+            }
+            else if (Roles.ContainsKey(rol.IdRol))
+            {
+                Roles[rol.IdRol] = rol;
             }
             else
             {
-                Roles[rol.IdRol] = rol;
-// TODO: mirar como añadir a logs y corregir
-//               AgregarLog(new EntradaLog($"Rol actualizado: {rol.Nombre}"));
+                throw new KeyNotFoundException(
+                    $"No se encontró el rol con Id {rol.IdRol}");
             }
+
             return rol;
         }
 
-        
+
         public List<Proyecto> ProyectosTodos()
         {
             return new List<Proyecto>(Proyectos.Values);
