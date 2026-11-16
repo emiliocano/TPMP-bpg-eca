@@ -193,4 +193,26 @@ public class DatosTest
         Assert.AreEqual("PRUEBA", recuperado?.Siglas);
         Assert.AreEqual("Descripción de prueba", recuperado?.Descripcion);
     }
+    [TestMethod]
+    public void GuardarAltas_AsignaIdentificadoresConsecutivosPorTipo()
+    {
+        IDatos datos = new Datos();
+        var usuario1 = new Usuario(-1, "testerUno", "uno@example.test");
+        var usuario2 = new Usuario(-2, "testerDos", "dos@example.test");
+        var rol1 = new Rol("Tester");
+        var rol2 = new Rol("Revisor");
+        var proyecto1 = new Proyecto { Nombre = "Proyecto uno", Siglas = "P01" };
+        var proyecto2 = new Proyecto { Nombre = "Proyecto dos", Siglas = "P02" };
+
+        datos.GuardarUsuario(usuario1);
+        datos.GuardarRol(rol1);
+        datos.GuardarProyecto(proyecto1);
+        datos.GuardarUsuario(usuario2);
+        datos.GuardarRol(rol2);
+        datos.GuardarProyecto(proyecto2);
+
+        CollectionAssert.AreEqual(new[] { 3, 4 }, new[] { usuario1.IdUsuario, usuario2.IdUsuario });
+        CollectionAssert.AreEqual(new[] { 2, 3 }, new[] { rol1.IdRol, rol2.IdRol });
+        CollectionAssert.AreEqual(new[] { 2, 3 }, new[] { proyecto1.IdProyecto, proyecto2.IdProyecto });
+    }
 }
