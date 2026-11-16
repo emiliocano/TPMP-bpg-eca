@@ -170,4 +170,27 @@ public class DatosTest
         Assert.HasCount(cantidadInicial + 1, datos.Roles);
         Assert.AreEqual("Tester", datos.LeerRol(guardado.IdRol)?.Nombre);
     }
+    [TestMethod]
+    public void GuardarProyecto_ConProyectoNuevo_LoIncorporaALaColeccion()
+    {
+        IDatos datos = new Datos();
+        int cantidadInicial = datos.Proyectos.Count;
+        var proyecto = new Proyecto
+        {
+            Nombre = "Proyecto de prueba",
+            Siglas = "PRUEBA",
+            Descripcion = "Descripción de prueba"
+        };
+
+        var guardado = datos.GuardarProyecto(proyecto);
+
+        Assert.IsNotNull(guardado);
+        Assert.IsGreaterThan(0, guardado.IdProyecto);
+        Assert.HasCount(cantidadInicial + 1, datos.Proyectos);
+
+        var recuperado = datos.LeerProyecto(guardado.IdProyecto);
+        Assert.AreEqual("Proyecto de prueba", recuperado?.Nombre);
+        Assert.AreEqual("PRUEBA", recuperado?.Siglas);
+        Assert.AreEqual("Descripción de prueba", recuperado?.Descripcion);
+    }
 }
