@@ -156,4 +156,18 @@ public class DatosTest
         Assert.AreEqual("Usuario de prueba", recuperado?.Nombre);
         Assert.AreEqual("alta@example.test", recuperado?.EMail);
     }
+    [TestMethod]
+    public void GuardarRol_ConRolNuevo_LoIncorporaALaColeccion()
+    {
+        IDatos datos = new Datos();
+        int cantidadInicial = datos.Roles.Count;
+        var rol = new Rol("Tester");
+
+        var guardado = datos.GuardarRol(rol);
+
+        Assert.IsNotNull(guardado);
+        Assert.IsGreaterThan(0, guardado.IdRol);
+        Assert.HasCount(cantidadInicial + 1, datos.Roles);
+        Assert.AreEqual("Tester", datos.LeerRol(guardado.IdRol)?.Nombre);
+    }
 }
