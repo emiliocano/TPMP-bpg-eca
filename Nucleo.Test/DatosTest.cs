@@ -61,4 +61,24 @@ public class DatosTest
         Assert.AreEqual(1, datos.Roles.Count);
         Assert.AreEqual(1, datos.Proyectos.Count);
     }
+    [TestMethod]
+    public void Eliminar_ConIdExistente_DevuelveLaEntidadYLaRetira()
+    {
+        IDatos datos = new Datos();
+
+        var usuario = datos.EliminarUsuario(1);
+        var rol = datos.EliminarRol(1);
+        var proyecto = datos.EliminarProyecto(1);
+
+        Assert.AreEqual("uadmin@ubu.es", usuario?.EMail);
+        Assert.AreEqual("Administrador", rol?.Nombre);
+        Assert.AreEqual("PROY001", proyecto?.Siglas);
+
+        Assert.IsNull(datos.LeerUsuario(1));
+        Assert.IsNull(datos.LeerUsuario("uadmin@ubu.es"));
+        Assert.IsNull(datos.LeerRol(1));
+        Assert.IsNull(datos.LeerProyecto(1));
+
+        Assert.AreEqual("tester1@ubu.es", datos.LeerUsuario(2)?.EMail);
+    }
 }
