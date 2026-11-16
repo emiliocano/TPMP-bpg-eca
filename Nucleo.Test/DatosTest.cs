@@ -136,4 +136,24 @@ public class DatosTest
         Assert.AreEqual("Entrada de prueba", registro.Mensaje);
         Assert.AreEqual("tester", registro.NombreUsuario);
     }
+    [TestMethod]
+    public void GuardarUsuario_ConUsuarioNuevo_LoIncorporaALaColeccion()
+    {
+        IDatos datos = new Datos();
+        int cantidadInicial = datos.Usuarios.Count;
+        var usuario = new Usuario(-1, "testerNuevo", "alta@example.test")
+        {
+            Nombre = "Usuario de prueba"
+        };
+
+        var guardado = datos.GuardarUsuario(usuario);
+
+        Assert.IsNotNull(guardado);
+        Assert.IsGreaterThan(0, guardado.IdUsuario);
+        Assert.HasCount(cantidadInicial + 1, datos.Usuarios);
+
+        var recuperado = datos.LeerUsuario(guardado.IdUsuario);
+        Assert.AreEqual("Usuario de prueba", recuperado?.Nombre);
+        Assert.AreEqual("alta@example.test", recuperado?.EMail);
+    }
 }
