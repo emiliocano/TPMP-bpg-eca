@@ -107,4 +107,15 @@ public class DatosTest
         Assert.AreEqual("Administrador", datos.LeerRol(1)?.Nombre);
         Assert.AreEqual("PROY001", datos.LeerProyecto(1)?.Siglas);
     }
+    [TestMethod]
+    public void Buscar_EntidadInexistente_DevuelveNull()
+    {
+        IDatos datos = new Datos();
+        const int idInexistente = 9999;
+
+        Assert.IsNull(datos.LeerUsuario(idInexistente));
+        Assert.IsNull(datos.LeerUsuario("inexistente@example.test"));
+        Assert.IsNull(datos.LeerRol(idInexistente));
+        Assert.IsNull(datos.LeerProyecto(idInexistente));
+    }
 }
