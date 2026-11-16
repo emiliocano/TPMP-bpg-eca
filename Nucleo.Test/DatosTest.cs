@@ -118,4 +118,22 @@ public class DatosTest
         Assert.IsNull(datos.LeerRol(idInexistente));
         Assert.IsNull(datos.LeerProyecto(idInexistente));
     }
+    [TestMethod]
+    public void AgregarLog_ConEntradaValida_ConservaSusDatos()
+    {
+        IDatos datos = new Datos();
+        var fecha = new DateTime(2026, 1, 15, 12, 0, 0);
+        var entrada = new EntradaLog(fecha, "Información", "Entrada de prueba", "tester");
+
+        datos.AgregarLog(entrada);
+
+        var registros = datos.Logs;
+        Assert.HasCount(1, registros);
+
+        var registro = registros[0];
+        Assert.AreEqual(fecha, registro.FechaHora);
+        Assert.AreEqual("Información", registro.Nivel);
+        Assert.AreEqual("Entrada de prueba", registro.Mensaje);
+        Assert.AreEqual("tester", registro.NombreUsuario);
+    }
 }
