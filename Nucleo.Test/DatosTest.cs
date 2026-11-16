@@ -33,4 +33,32 @@ public class DatosTest
             new[] { 1, proyecto.IdProyecto },
             datos.ProyectosTodos().Select(p => p.IdProyecto).ToArray());
     }
+    [TestMethod]
+    public void Guardar_ConIdExistente_ActualizaLaEntidad()
+    {
+        IDatos datos = new Datos();
+
+        var usuario = new Usuario(1, "admin", "uadmin@ubu.es", "DemoLocal26!")
+        {
+            Nombre = "Usuario actualizado"
+        };
+        var rol = new Rol("Rol actualizado") { IdRol = 1 };
+        var proyecto = new Proyecto
+        {
+            IdProyecto = 1,
+            Nombre = "Proyecto actualizado",
+            Siglas = "PROY001"
+        };
+
+        datos.GuardarUsuario(usuario);
+        datos.GuardarRol(rol);
+        datos.GuardarProyecto(proyecto);
+
+        Assert.AreEqual("Usuario actualizado", datos.LeerUsuario(1)?.Nombre);
+        Assert.AreEqual("Rol actualizado", datos.LeerRol(1)?.Nombre);
+        Assert.AreEqual("Proyecto actualizado", datos.LeerProyecto(1)?.Nombre);
+        Assert.AreEqual(2, datos.Usuarios.Count);
+        Assert.AreEqual(1, datos.Roles.Count);
+        Assert.AreEqual(1, datos.Proyectos.Count);
+    }
 }
