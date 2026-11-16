@@ -81,4 +81,30 @@ public class DatosTest
 
         Assert.AreEqual("tester1@ubu.es", datos.LeerUsuario(2)?.EMail);
     }
+    [TestMethod]
+    public void Reiniciar_RestauraLosDatosDeEjemploYVaciaElLog()
+    {
+        IDatos datos = new Datos();
+        var usuario = new Usuario(-1, "temporal", "reinicio@example.test");
+        var rol = new Rol("Rol temporal");
+        var proyecto = new Proyecto { Nombre = "Proyecto temporal", Siglas = "TEMP" };
+
+        datos.GuardarUsuario(usuario);
+        datos.GuardarRol(rol);
+        datos.GuardarProyecto(proyecto);
+        datos.AgregarLog(new EntradaLog(DateTime.Now, "Prueba", "Entrada temporal", "temporal"));
+        datos.EliminarUsuario(1);
+
+        datos.Reiniciar();
+
+        Assert.IsNull(datos.LeerUsuario(usuario.IdUsuario));
+        Assert.IsNull(datos.LeerRol(rol.IdRol));
+        Assert.IsNull(datos.LeerProyecto(proyecto.IdProyecto));
+        Assert.AreEqual(0, datos.Logs.Count);
+
+        Assert.AreEqual("uadmin@ubu.es", datos.LeerUsuario(1)?.EMail);
+        Assert.AreEqual("tester1@ubu.es", datos.LeerUsuario(2)?.EMail);
+        Assert.AreEqual("Administrador", datos.LeerRol(1)?.Nombre);
+        Assert.AreEqual("PROY001", datos.LeerProyecto(1)?.Siglas);
+    }
 }
