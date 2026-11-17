@@ -5,7 +5,7 @@ using System.Text;
 namespace TPMP_bpg_eca.Nucleo.Seguridad;
 
 public class ControlIntentosAcceso
-{
+{// Tras tres fallos consecutivos se bloquea el acceso cinco minutos
     private const int MaximoIntentos = 3;
     private static readonly TimeSpan DuracionBloqueo =
         TimeSpan.FromMinutes(5);
@@ -62,7 +62,8 @@ public class ControlIntentosAcceso
 
         IntentosFallidos = 0;
     }
-
+    // Al vencer el bloqueo se restablece el contador de fallos,
+    // permitiendo al usuario disponer de tres nuevos intentos
     private void ActualizarBloqueo(DateTimeOffset ahora)
     {
         if (BloqueadoHasta is DateTimeOffset fin && ahora >= fin)

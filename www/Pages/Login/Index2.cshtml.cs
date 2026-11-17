@@ -133,7 +133,8 @@ public class Index2Model : PageModel
             // Una contraseña correcta reinicia los fallos anteriores
             usuario.ControlAcceso.RegistrarAcierto(DateTimeOffset.UtcNow);
 
-            //Primero guardas la fecha del acceso anterior para mostrarla en el perfil y luego registras la hora del nuevo acceso
+            //Primero guardas la fecha del acceso anterior para mostrarla en el perfil
+            //y luego registras la hora del nuevo acceso
             HttpContext.Session.SetString(
             ClavesSesion.FechaAccesoAnterior,
             Formatos.FormatearFecha(usuario.FechaUltimoAcceso));

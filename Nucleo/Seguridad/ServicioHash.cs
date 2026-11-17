@@ -3,12 +3,13 @@
 namespace TPMP_bpg_eca.Nucleo.Seguridad;
 
 public static class ServicioHash
-{
+{// Parámetros utilizados para generar el hash de las contraseñas:
+ // sal de 16 bytes, hash de 32 bytes y 100.000 iteraciones
     private const int TamanoSal = 16;
     private const int TamanoHash = 32;
     private const int NumeroIteraciones = 100_000;
 
-    // Permite que Usuario y Generar creen la sal de la misma forma
+    
     internal static byte[] CrearSal()
     {
         return RandomNumberGenerator.GetBytes(TamanoSal);
@@ -53,7 +54,8 @@ public static class ServicioHash
                 Convert.FromBase64String(hashAlmacenado);
 
             byte[] hashCalculado = Calcular(texto, sal);
-
+            // Compara los hashes en tiempo constante para reducir
+            // la información que podría revelar el tiempo de respuesta
             return CryptographicOperations.FixedTimeEquals(
                 hashCalculado,
                 hashEsperado);
@@ -71,7 +73,7 @@ public static class ServicioHash
         return hashAlmacenado is not null &&
             Verificar(texto, hashAlmacenado.Hash, hashAlmacenado.Sal);
     }
-
+    // Deriva el hash mediante PBKDF2 con SHA-256 y la sal indicada
     internal static byte[] Calcular(
         string texto,
         byte[] sal)

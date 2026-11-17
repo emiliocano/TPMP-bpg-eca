@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Reflection.PortableExecutable;
 using System.Text;
-// Permite usar el servicio que genera y verifica las contraseñas
 using TPMP_bpg_eca.Nucleo.Seguridad;
 
 namespace TPMP_bpg_eca.Nucleo.Modelo
@@ -21,7 +20,7 @@ namespace TPMP_bpg_eca.Nucleo.Modelo
         private string   _eMail;
         private Rol      _rol;
         private Idioma   _idioma;
-        //conectar la propiedad Activa con este campo, queremos que los usuarios creados inicialmente puedan entrar. Sin inicializarlo, su valor sería falso
+        // Los usuarios nuevos se crean con la cuenta activa
         private bool _activo = true;
         private DateTime _fechaCambioPwd;
         private DateTime _fechaUltimoAcceso;
@@ -89,7 +88,7 @@ namespace TPMP_bpg_eca.Nucleo.Modelo
         /// <summary>
         /// Obtiene o establece el segundo apellido del usuario.
         /// </summary>
-        /// <value>Cadena de texto con el segundo appellido del usuario.</value>
+        /// <value>Cadena de texto con el segundo apellido del usuario.</value>
         public string SegundoApellidoUsuario { get { return this._apellido2; } set { this._apellido2 = value; } }
 
         /// <summary>
@@ -99,9 +98,9 @@ namespace TPMP_bpg_eca.Nucleo.Modelo
         public string NombreCompleto { get { return (this._nombre + " " + this._apellido1 + " " + this._apellido2); } }
 
         /// <summary>
-        /// Obtiene o establece los paellidos del usuario.
+        /// Obtiene o establece los apellidos del usuario.
         /// </summary>
-        /// <value>Cadena de texto con los paellidos del usuario.</value>
+        /// <value>Cadena de texto con los apellidos del usuario.</value>
         public string Apellidos { 
             get { return this._apellido1 + " " + this._apellido2; } 
             set
@@ -125,7 +124,7 @@ namespace TPMP_bpg_eca.Nucleo.Modelo
         /// <returns>Una cadena de texto (string) que contiene la sal generada.</returns>
         public string generadorSalClave()
         {
-            // Guardamos la sal como texto en el mismo formato que usa ServicioHash
+            
             return Convert.ToBase64String(ServicioHash.CrearSal());
         }
 
@@ -137,7 +136,7 @@ namespace TPMP_bpg_eca.Nucleo.Modelo
         /// <returns>La contraseña cifrada en formato de cadena hash.</returns>
         public string generadorHashClave(string clave, string sal)
         {
-            // Recuperamos los bytes de la sal recibida y calculamos el hash con ella.
+            
             byte[] bytesSal = Convert.FromBase64String(sal);
             byte[] hash = ServicioHash.Calcular(clave, bytesSal);
             return Convert.ToBase64String(hash);
