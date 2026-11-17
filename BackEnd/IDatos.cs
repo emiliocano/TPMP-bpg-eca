@@ -38,7 +38,6 @@ namespace BackEnd
 
         void Reiniciar();
 
-//TODO: implementar
         public List<Proyecto> ProyectosTodos();
 
     }
