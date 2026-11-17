@@ -1,4 +1,5 @@
 <Solution>
+  <Project Path="BackEnd.Test/BackEnd.Test.csproj" Id="e68b0882-e17a-4c74-8e62-7a355751acdf" />
   <Project Path="BackEnd/BackEnd.csproj" Id="d768a4eb-56f3-4891-a0bd-fd6456e6df4c" />
   <Project Path="Nucleo.Test/Nucleo.Test.csproj" Id="fed487b0-b99a-481f-8694-900548177ac1" />
   <Project Path="Nucleo/Nucleo.csproj" />
