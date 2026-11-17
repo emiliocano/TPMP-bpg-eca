@@ -47,25 +47,21 @@ public class ServicioCifradoTest
     [TestMethod]
     public void ContenidoCifradoEsNulo_EnCifrar_ArgumentException()
     {
-        // si se pasa null debería lanzarse una exceppcion Agument exception
-        // Generamos una clave para descifrar
         string clave = ServicioCifrado.GenerarClave();
 
-        // Ciframos el mensaje y guardamos el resultado
-        string cifrado = null;
-        Assert.Throws<ArgumentException>(() => ServicioCifrado.Cifrar(cifrado, clave));
+        var error = Assert.ThrowsExactly<ArgumentException>(() => ServicioCifrado.Cifrar(null!, clave));
+
+        Assert.AreEqual("texto", error.ParamName);
     }
 
     [TestMethod]
     public void ContenidoCifradoEsNulo_EnDescifrar_ArgumentException()
     {
-        // si se pasa null debería lanzarse una exceppcion Agument exception
-        // Generamos una clave para descifrar
         string clave = ServicioCifrado.GenerarClave();
 
-        // Ciframos el mensaje y guardamos el resultado
-        string cifrado = null;
-        Assert.Throws<ArgumentException>(() => ServicioCifrado.Descifrar(cifrado, clave));
+        var error = Assert.ThrowsExactly<ArgumentException>(() => ServicioCifrado.Descifrar(null!, clave));
+
+        Assert.AreEqual("contenidoCifradoBase64", error.ParamName);
     }
 
 }

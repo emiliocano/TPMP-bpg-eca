@@ -66,33 +66,10 @@ public static class ServicioHash
 
     public static bool Verificar(
         string texto,
-        ResultadoHash hashAlmacenado)
+        ResultadoHash? hashAlmacenado)
     {
-        if (string.IsNullOrWhiteSpace(texto) ||
-            string.IsNullOrWhiteSpace(hashAlmacenado.Hash) ||
-            string.IsNullOrWhiteSpace(hashAlmacenado.Sal))
-        {
-            return false;
-        }
-
-        try
-        {
-            byte[] sal =
-                Convert.FromBase64String(hashAlmacenado.Sal);
-
-            byte[] hashEsperado =
-                Convert.FromBase64String(hashAlmacenado.Hash);
-
-            byte[] hashCalculado = Calcular(texto, sal);
-
-            return CryptographicOperations.FixedTimeEquals(
-                hashCalculado,
-                hashEsperado);
-        }
-        catch (FormatException)
-        {
-            return false;
-        }
+        return hashAlmacenado is not null &&
+            Verificar(texto, hashAlmacenado.Hash, hashAlmacenado.Sal);
     }
 
     internal static byte[] Calcular(
