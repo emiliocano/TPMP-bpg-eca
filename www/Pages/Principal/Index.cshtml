@@ -2,7 +2,7 @@
 @model www.Pages.Principal.IndexModel 
 @{ 
     ViewData["Title"] = "Principal";
-    ViewData["NombreProyecto"] = "-";
+    ViewData["NombreProyecto"] = Model.NombreProyectoActual;
     ViewData["TituloCabecera"] = "Página principal";
     ViewData["MostrarMenuUsuario"] = true;
     ViewData["NombreUsuario"] = Model.NombreUsuario;

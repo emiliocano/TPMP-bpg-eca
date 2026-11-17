@@ -21,7 +21,7 @@ public class IndexModel : PageModel
     public string NombreUsuarioCabecera { get; private set; } = string.Empty;
 
     public string NombreProyectoActual { get; private set; }
-        = "Sin proyecto seleccionado";
+        = SesionAplicacion.SinProyecto;
 
     public int IdUsuario { get; private set; }
 
@@ -103,7 +103,7 @@ public class IndexModel : PageModel
 
         if (usuario is null)
         {
-            LimpiarSesion();
+            HttpContext.Session.Clear();
             return RedirectToPage("/Login/Index");
         }
 
@@ -120,7 +120,7 @@ public class IndexModel : PageModel
 
         if (usuario is null)
         {
-            LimpiarSesion();
+            HttpContext.Session.Clear();
             return RedirectToPage("/Login/Index");
         }
 
@@ -166,7 +166,7 @@ public class IndexModel : PageModel
 
         if (usuario is null)
         {
-            LimpiarSesion();
+            HttpContext.Session.Clear();
             return RedirectToPage("/Login/Index");
         }
 
@@ -180,24 +180,17 @@ public class IndexModel : PageModel
             return Page();
         }
 
-        if (!usuario.CompruebaPassword(PasswordActual))
+        bool cambioCorrecto;
+        lock (usuario.ControlAcceso)
         {
-            ModelState.AddModelError(
-                nameof(PasswordActual),
-                "La contraseña actual no es correcta.");
-
-            return Page();
+            cambioCorrecto = usuario.CambiaPassword(PasswordActual, PasswordNueva);
         }
-
-        bool cambioCorrecto = usuario.CambiaPassword(
-            PasswordActual,
-            PasswordNueva);
 
         if (!cambioCorrecto)
         {
             ModelState.AddModelError(
-                nameof(PasswordNueva),
-                "No se ha podido cambiar la contraseña.");
+                nameof(PasswordActual),
+                "La contraseña actual no es correcta.");
 
             return Page();
         }
@@ -259,44 +252,9 @@ public class IndexModel : PageModel
 
     private void CargarCabecera(Usuario usuario)
     {
-        NombreUsuarioCabecera =
-            $"{usuario.Nombre} {usuario.Apellidos}".Trim();
-
-        int? idProyecto = HttpContext.Session.GetInt32(
-            ClavesSesion.ProyectoActualId);
-
-        if (idProyecto is not int id)
-        {
-            NombreProyectoActual =
-                "Sin proyecto seleccionado";
-
-            return;
-        }
-
-        Proyecto? proyecto = _datos.LeerProyecto(id);
-
-        if (proyecto is null || !proyecto.Activo)
-        {
-            HttpContext.Session.Remove(
-                ClavesSesion.ProyectoActualId);
-
-            NombreProyectoActual =
-                "Sin proyecto seleccionado";
-
-            return;
-        }
-
-        NombreProyectoActual = proyecto.Nombre;
-    }
-
-    private static string FormatearFecha(DateTime fecha)
-    {
-        if (fecha == default)
-        {
-            return "No consta";
-        }
-
-        return fecha.ToString("dd/MM/yyyy HH:mm:ss");
+        NombreUsuarioCabecera = SesionAplicacion.ObtenerNombreVisible(usuario);
+        NombreProyectoActual = HttpContext.Session.LeerProyectoActual(_datos)?.Nombre
+            ?? SesionAplicacion.SinProyecto;
     }
 
     private void QuitarValidacionPassword()
@@ -313,15 +271,4 @@ public class IndexModel : PageModel
         ModelState.Remove(nameof(Apellidos));
     }
 
-    private void LimpiarSesion()
-    {
-        HttpContext.Session.Remove(
-            ClavesSesion.EmailPendiente);
-
-        HttpContext.Session.Remove(
-            ClavesSesion.UsuarioId);
-
-        HttpContext.Session.Remove(
-            ClavesSesion.ProyectoActualId);
-    }
 }

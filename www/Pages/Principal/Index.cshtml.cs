@@ -14,6 +14,8 @@ public class IndexModel : PageModel
 
     public string NombreUsuario { get; set; } = "";
 
+    public string NombreProyectoActual { get; private set; } = SesionAplicacion.SinProyecto;
+
     public IndexModel(IDatos datos)
     {
         _datos = datos;
@@ -25,7 +27,7 @@ public class IndexModel : PageModel
 
         if (idUsuario is null || idUsuario <= 0)
         {
-            EliminarDatosSesion();
+            HttpContext.Session.Clear();
             return RedirectToPage("/Login/Index");
         }
 
@@ -33,33 +35,30 @@ public class IndexModel : PageModel
 
         if (UsuarioActual is null)
         {
-            EliminarDatosSesion();
+            HttpContext.Session.Clear();
             return RedirectToPage("/Login/Index");
         }
 
-        NombreUsuario = UsuarioActual.EMail; // Sustituir por tu propiedad real
+        NombreUsuario = UsuarioActual.EMail;
+        NombreProyectoActual = HttpContext.Session.LeerProyectoActual(_datos)?.Nombre
+            ?? SesionAplicacion.SinProyecto;
 
         return Page();
     }
 
-    public IActionResult OnPostCerrarSesion() {
+    public IActionResult OnPostCerrarSesion()
+    {
         int? idUsuario = HttpContext.Session.GetInt32(ClavesSesion.UsuarioId);
         if (idUsuario is not null)
         {
             var usuario = _datos.LeerUsuario(idUsuario.Value);
             if (usuario is not null)
-            { // Registrar el evento antes de limpiar la sesión.
-                _datos.AgregarLog(new EntradaLog(DateTime.Now, "Inicio de Sesión", $"Cierre de Sesión {usuario.EMail}", usuario.ToString()));
+            {
+                _datos.AgregarLog(new EntradaLog(DateTime.Now, "Información", "Cierre de sesión", usuario.EMail));
             }
         }
-        EliminarDatosSesion();
+        HttpContext.Session.Clear();
         return RedirectToPage("/Login/Index");
-    }
-
-    private void EliminarDatosSesion() { 
-        HttpContext.Session.Remove(ClavesSesion.EmailPendiente);
-        HttpContext.Session.Remove(ClavesSesion.UsuarioId);
-        HttpContext.Session.Remove(ClavesSesion.ProyectoActualId);
     }
 }
 

@@ -15,9 +15,7 @@ public class IndexModel : PageModel
     public IActionResult OnGet()
     {
         // Limpiar la sesión al iniciar sesión
-        HttpContext.Session.Remove(ClavesSesion.EmailPendiente);
-        HttpContext.Session.Remove(ClavesSesion.ProyectoActualId);
-        HttpContext.Session.Remove(ClavesSesion.UsuarioId);
+        HttpContext.Session.Clear();
         return Page();
     }
     public IActionResult OnPost()

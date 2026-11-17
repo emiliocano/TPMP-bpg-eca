@@ -38,7 +38,7 @@ public class IndexModel : PageModel
     {
         get;
         private set;
-    } = "Sin proyecto seleccionado";
+    } = SesionAplicacion.SinProyecto;
 
     public string NombreUsuario
     {
@@ -82,11 +82,11 @@ public class IndexModel : PageModel
         ErrorMessage =
             "La descripción no puede superar 500 caracteres.")]
     [Display(Name = "Descripción")]
-    public string Descripcion
+    public string? Descripcion
     {
         get;
         set;
-    } = string.Empty;
+    }
 
     public IActionResult OnGet()
     {
@@ -162,15 +162,20 @@ public class IndexModel : PageModel
             IdProyecto = -1,
             Nombre = nombreNormalizado,
             Siglas = siglasNormalizadas,
-            Descripcion = Descripcion.Trim(),
+            Descripcion = Descripcion?.Trim() ?? string.Empty,
             FechaCreacion = DateTime.Now,
 
             // Activo significa que el proyecto está disponible.
             Activo = true
         };
 
-        Proyecto proyectoGuardado =
+        Proyecto? proyectoGuardado =
             _datos.GuardarProyecto(nuevoProyecto);
+        if (proyectoGuardado is null)
+        {
+            ModelState.AddModelError(string.Empty, "No se ha podido guardar el proyecto.");
+            return Page();
+        }
 
         // El nuevo proyecto se establece como proyecto actual
         // de este usuario.
@@ -248,20 +253,15 @@ public class IndexModel : PageModel
 
         if (usuario is null)
         {
-            EliminarDatosSesion();
+            HttpContext.Session.Clear();
 
             return RedirectToPage("/Login/Index");
         }
 
-        /*
-         * Sustituye ToString() por la propiedad real
-         * si Usuario tiene Nombre o NombreCompleto.
-         */
-        NombreUsuario = usuario.NombreCompleto;
-
-        IdProyectoActual =
-            HttpContext.Session.GetInt32(
-                ClavesSesion.ProyectoActualId);
+        NombreUsuario = SesionAplicacion.ObtenerNombreVisible(usuario);
+        Proyecto? proyectoActual = HttpContext.Session.LeerProyectoActual(_datos);
+        IdProyectoActual = proyectoActual?.IdProyecto;
+        NombreProyectoActual = proyectoActual?.Nombre ?? SesionAplicacion.SinProyecto;
 
         List<Proyecto> proyectos =
             _datos
@@ -279,52 +279,6 @@ public class IndexModel : PageModel
                 .Where(proyecto => !proyecto.Activo)
                 .ToList();
 
-        ComprobarProyectoActual();
-
         return null;
-    }
-
-    private void ComprobarProyectoActual()
-    {
-        if (IdProyectoActual is null)
-        {
-            NombreProyectoActual =
-                "Sin proyecto seleccionado";
-
-            return;
-        }
-
-        Proyecto? proyectoActual =
-            _datos.LeerProyecto(
-                IdProyectoActual.Value);
-
-        if (proyectoActual is null ||
-            !proyectoActual.Activo)
-        {
-            HttpContext.Session.Remove(
-                ClavesSesion.ProyectoActualId);
-
-            IdProyectoActual = null;
-
-            NombreProyectoActual =
-                "Sin proyecto seleccionado";
-
-            return;
-        }
-
-        NombreProyectoActual =
-            proyectoActual.Nombre;
-    }
-
-    private void EliminarDatosSesion()
-    {
-        HttpContext.Session.Remove(
-            ClavesSesion.EmailPendiente);
-
-        HttpContext.Session.Remove(
-            ClavesSesion.UsuarioId);
-
-        HttpContext.Session.Remove(
-            ClavesSesion.ProyectoActualId);
     }
 }

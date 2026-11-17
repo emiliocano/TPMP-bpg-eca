@@ -17,6 +17,8 @@ public class IndexModel : PageModel
 
     public string NombreUsuario { get; private set; } = "";
 
+    public string NombreProyectoActual { get; private set; } = SesionAplicacion.SinProyecto;
+
     public List<EntradaLog> Eventos { get; private set; } = [];
 
     public List<string> Niveles { get; private set; } = [];
@@ -43,13 +45,14 @@ public class IndexModel : PageModel
 
         if (usuario is null)
         {
-            HttpContext.Session.Remove(
-                ClavesSesion.UsuarioId);
+            HttpContext.Session.Clear();
 
             return RedirectToPage("/Login/Index");
         }
 
         NombreUsuario = usuario.EMail;
+        NombreProyectoActual = HttpContext.Session.LeerProyectoActual(_datos)?.Nombre
+            ?? SesionAplicacion.SinProyecto;
 
         var eventos = _datos.Logs
             .Select(log =>

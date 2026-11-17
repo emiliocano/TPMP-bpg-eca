@@ -15,9 +15,9 @@ namespace TPMP_bpg_eca.Nucleo.Modelo
     {
         private int      _id;
         private string   _usuario;
-        private string   _nombre;
-        private string   _apellido1;
-        private string   _apellido2;
+        private string   _nombre = string.Empty;
+        private string   _apellido1 = string.Empty;
+        private string   _apellido2 = string.Empty;
         private string   _eMail;
         private Rol      _rol;
         private Idioma   _idioma;
@@ -106,9 +106,10 @@ namespace TPMP_bpg_eca.Nucleo.Modelo
             get { return this._apellido1 + " " + this._apellido2; } 
             set
             {
-                string[] ap = value.Trim().Split(' ');
-                PrimerApellidoUsuario = ap[0];
-                SegundoApellidoUsuario = ap.Length > 1 ? ap[1] : "";
+                string[] apellidos = value.Split((char[]?)null, 2,
+                    StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+                PrimerApellidoUsuario = apellidos.Length > 0 ? apellidos[0] : string.Empty;
+                SegundoApellidoUsuario = apellidos.Length > 1 ? apellidos[1] : string.Empty;
             } 
         }
 

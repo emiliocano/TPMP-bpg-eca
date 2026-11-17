@@ -197,6 +197,18 @@ public class UsuarioTest
     }
 
     [TestMethod]
+    [DataRow("De la Cruz Pérez", "De la Cruz Pérez")]
+    [DataRow("  García   López  ", "García López")]
+    public void Apellidos_AlGuardarElPerfil_ConservaTodasLasPalabras(string entrada, string esperado)
+    {
+        var usuario = new Usuario(1, "tester", "tester@example.test");
+
+        usuario.Apellidos = entrada;
+
+        Assert.AreEqual(esperado, usuario.Apellidos);
+    }
+
+    [TestMethod]
     public void ModificaLosDosApellidosALaVez_SoloPrimerApellido()
     {
         string apellido1_Usuario = "Zapico";
