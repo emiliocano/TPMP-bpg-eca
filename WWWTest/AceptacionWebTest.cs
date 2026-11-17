@@ -41,9 +41,35 @@ public class AceptacionWebTest
 
         var opciones = new ChromeOptions();
         opciones.AddArguments("--headless", "--window-size=1440,1000");
-        _chrome = new ChromeDriver(opciones);
+        try
+        {
+            _chrome = CrearSesionChrome(opciones);
+        }
+        catch (WebDriverException error) when (error.InnerException is HttpRequestException)
+        {
+            // Reintenta solo la conexión inicial, antes de ejecutar el caso.
+            _chrome = CrearSesionChrome(opciones);
+        }
+
         _espera = new WebDriverWait(_chrome, TimeSpan.FromSeconds(10));
         _espera.IgnoreExceptionTypes(typeof(StaleElementReferenceException));
+    }
+
+    private static ChromeDriver CrearSesionChrome(ChromeOptions opciones)
+    {
+        var servicio = ChromeDriverService.CreateDefaultService();
+        servicio.HostName = "127.0.0.1";
+        servicio.HideCommandPromptWindow = true;
+
+        try
+        {
+            return new ChromeDriver(servicio, opciones);
+        }
+        catch
+        {
+            servicio.Dispose();
+            throw;
+        }
     }
 
     [TestCleanup]
